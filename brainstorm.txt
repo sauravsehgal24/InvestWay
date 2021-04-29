@@ -1,0 +1,49 @@
+Brainstorm schemas for mongo:
+
+User
+    -ID
+    -Name
+    -PersonalSettings:{
+        -ProfileImage
+        -Address
+        -Phone
+        -Email
+        -Password
+        -GenreVal: [Between 0-100]
+        -EquityVal: [Between 0-100]
+        -DiversityVal: GenreVal + EquityVal
+        -Generes:[ask user about this]
+        -Equities:[all types of equities]
+    }
+    -QsProfile:{
+        -QsPortfolioKey
+        -QsPortfolioAuthKey
+        -QsPortfolioData
+        -QsPortfolio stuff like Total equity, cash etc
+    }
+
+Equity 
+    -ID
+    -Type: [Stock, Bonds, etc]
+    -Genre
+    -Name
+    -Symbol
+    -TotalQty
+    -TotalMarketVal
+    -LastUpdateDate
+    -StockExchangeName
+    -History:[
+        {
+            -ID
+            -TransactionType: [PURCHASE or SOLD]
+            -Qty
+            -PricePerEquityTransaction
+            -TotalPriceOfTransaction
+            -DateTransactionMade
+            -DateTransactionApproved
+            -Status: [issued, waiting]
+            -OrderType: [market, limit, etc]
+            -DividendInfo
+        }
+    ]
+    
