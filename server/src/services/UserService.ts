@@ -10,7 +10,7 @@ export class UserService{
         this._userRepo = this.connection.getRepository(User);
     }
     public testUserService = async () =>{
-        const users = await this._userRepo.find()
+        const users = await this._userRepo.find() 
         return users
     }
 }
