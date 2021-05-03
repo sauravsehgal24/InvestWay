@@ -11,4 +11,4 @@ export class QsService{
     public processTokenRequest = () =>{
 
     }
-}
+}  
