@@ -7,7 +7,7 @@
     "lint": "eslint . --ext .ts",
     "app:watch": "cd app && webpack serve --config webpack.development.js",
     "server:watch": "cd server && ts-node-dev index.ts",
-    "system:watch":"concurrently \"npm run app:watch\" \"npm run server:watch\"",
+    "system:watch": "concurrently \"npm run app:watch\" \"npm run server:watch\"",
     "migration:init": "migrate-mongo init",
     "server:watch:g": "gulp watch:server"
   },
@@ -31,6 +31,7 @@
     "compression": "^1.7.4",
     "concurrently": "^6.0.2",
     "cors": "^2.8.5",
+    "css-loader": "^5.2.4",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^7.0.2",
     "dotenv-webpack-plugin": "^1.0.0",
@@ -60,12 +61,14 @@
     "redux": "^4.1.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
+    "style-loader": "^2.0.0",
     "ts-loader": "^9.1.1",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.6",
     "tsc": "^1.20150623.0",
     "typeorm": "^0.2.32",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "url-loader": "^4.1.1"
   },
   "devDependencies": {
     "@types/node": "^15.0.1",
