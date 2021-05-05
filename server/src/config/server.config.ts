@@ -9,14 +9,11 @@ const configMapperFunction = ()=>{
         dotenv.config({ path: path.join(__dirname, "../../../.env.prod") });
     let CONFIG={};
     Object.keys(process.env).map(key=>{
-        const isIwConfigKey = key.toString().includes("IW_")
-        if(isIwConfigKey){
-            CONFIG[key] = process.env[key]
-        }
+        CONFIG[key] = process.env[key]
     })
     return CONFIG
 }
 
 const CONFIG = configMapperFunction()
 
-module.exports = CONFIG
+export default CONFIG

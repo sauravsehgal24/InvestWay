@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 type LoginProps = {
+    test:string
 }
 
 const Login:React.FC<LoginProps> = (props:LoginProps)=>{
@@ -25,7 +26,7 @@ const Login:React.FC<LoginProps> = (props:LoginProps)=>{
         setViewerLogin(false)
     }
     const _qsLogin = async () =>{
-
+        console.log(props.test)
     }
     return (
         <Grid style={{height:"100vh",backgroundImage:"url(../../../assets/images/loginBg.jpg)", backgroundRepeat:"no-repeat",backgroundSize:"100% 100vh"}} container alignItems="center" justify="center" direction="column" >

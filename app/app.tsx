@@ -7,6 +7,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+import routes from "./routes"
 import Login from "./src/components/login/login";
 
 type AppProps = {
@@ -17,7 +18,13 @@ const App:React.FC<AppProps> = ()=>{
     return (
         <React.Fragment>
             <Switch>
-                <Route exact path="/" component={Login} />
+        {
+            routes.map(r=>{
+                return <Route path={r.path} exact={r.exact} render={(props)=>{
+                    return <r.component {...props} {...r.props}/>
+                }}/>
+            })
+        }
             </Switch>
         </React.Fragment>
     )

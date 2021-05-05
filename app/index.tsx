@@ -9,7 +9,6 @@ import {
     Switch,
     Redirect,
   } from "react-router-dom";
-
 ReactDOM.render(
 <Router>
     <App test="saurav"/>

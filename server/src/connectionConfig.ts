@@ -1,14 +1,14 @@
 import { ConnectionOptions } from "typeorm";
 import * as path from "path";
-const CONFIG = require('./config/config')
+const CONFIG = require('./config/server.config')
 const config:ConnectionOptions = {
   type: "mongodb",
   url:"'mongodb://localhost:27017', {useNewUrlParser: true}",
-  host: CONFIG["IW_DB_HOST"],
-  port: parseInt(CONFIG["IW_DB_PORT"]),
-  username: CONFIG["IW_DB_USERNAME"],
-  password: CONFIG["IW_DB_PASSWORD"],
-  database: CONFIG["IW_DB_DATABASE"],
+  host: CONFIG["SERVER_IW_DB_HOST"],
+  port: parseInt(CONFIG["SERVER_IW_DB_PORT"]),
+  username: CONFIG["SERVER_IW_DB_USERNAME"],
+  password: CONFIG["SERVER_IW_DB_PASSWORD"],
+  database: CONFIG["SERVER_IW_DB_DATABASE"],
   synchronize: false,
   logging: false,
   autoReconnect:false,

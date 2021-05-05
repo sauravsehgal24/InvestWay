@@ -8,7 +8,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { Connection, Like } from "typeorm";
 import RootRouter from "./api/RootRouter";
-const CONFIG = require("./config/config")
+import SERVER_CONFIG from "./config/server.config";
 export type IServerConfig = InstanceType<typeof ServerConfig>
 export class ServerConfig{
     _context:string = "ServerConfig"
@@ -26,21 +26,22 @@ export class ServerConfig{
     };
     public initServer = () =>{
         this.enableRoutes()
-        if(CONFIG["IW_NODE_ENV"] === "local" || CONFIG["IW_NODE_ENV"] === "development"){
+        if(SERVER_CONFIG["IW_NODE_ENV"] === "local" || SERVER_CONFIG["IW_NODE_ENV"] === "development"){
             this.server = http.createServer(this.app);
-            this.server.listen(CONFIG["IW_SERVER_PORT"], () => {
+            this.server.listen(SERVER_CONFIG["SERVER_IW_SERVER_PORT"], () => {
                 console.log(
                     "\n---------------------------------------------------------------\nIW "
-                    +CONFIG['IW_NODE_ENV']+" ts server listening at http://localhost:"+CONFIG['IW_SERVER_PORT']+
+                    +SERVER_CONFIG['IW_NODE_ENV']+" ts server listening at http://localhost:"+SERVER_CONFIG['SERVER_IW_SERVER_PORT']+
                     "\n---------------------------------------------------------------\n"
                 );
             });
     }
     }
+    
     private enableRoutes = () =>{
         const allRoutes = new RootRouter(this.connection).getRoutes();
         this.app.use("/api",allRoutes);
-        if(CONFIG["IW_NODE_ENV"] === "local" || CONFIG["IW_NODE_ENV"] === "development"){
+        if(SERVER_CONFIG["IW_NODE_ENV"] === "local" || SERVER_CONFIG["IW_NODE_ENV"] === "development"){
             this.app.get("/", (req, res) => {
                 res.send("IW server active!"); 
             });
