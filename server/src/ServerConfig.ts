@@ -9,6 +9,7 @@ import * as fs from "fs";
 import { Connection, Like } from "typeorm";
 import RootRouter from "./api/RootRouter";
 import SERVER_CONFIG from "./config/server.config";
+import Response from "./config/HttpResponse";
 export type IServerConfig = InstanceType<typeof ServerConfig>
 export class ServerConfig{
     _context:string = "ServerConfig"
@@ -46,6 +47,14 @@ export class ServerConfig{
                 res.send("IW server active!"); 
             });
         }
+        this.app.get("/request_c_code",(req,res)=>{
+            res.status(Response.OK.status).json({
+                message:Response.OK.message,
+                c_code:SERVER_CONFIG["APP_IW_QS_CLIENT_CODE"],
+                url:SERVER_CONFIG["APP_IW_QS_API_AUTH"],
+                callbackUri:SERVER_CONFIG["APP_QS_AUTH_CALLBACK_URL"]
+            })
+        })
     }
     private injectMiddleware = () =>{
         this.app.use(bodyParser.urlencoded({ extended: false }));

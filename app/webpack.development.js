@@ -39,8 +39,9 @@ module.exports = {
       template: "./public/index.html",
     }),
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": '"development"',
-      "process.env.REACT_APP_API": '"http://localhost:3000/api"',
+      "process.env.NODE_ENV": JSON.stringify("development"),
+      "process.env.REACT_APP_API": JSON.stringify("http://localhost:3000/api"),
+      "process.env.REACT_APP_LOOPBACK": JSON.stringify("http://localhost:3000"),
     }),
   ],
   resolve: {

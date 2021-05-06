@@ -1,4 +1,5 @@
 import Login from './src/components/login/login';
+import QsProcessRedirect from './src/components/redirect/qsRes';
 import Dashboard from './src/components/userPortal/dashboard';
 const routes =[
     {
@@ -10,9 +11,18 @@ const routes =[
         }
     },
     {
+        path:"/qs_callback/:code",
+        component:QsProcessRedirect,
+        exact:true,
+        props:{
+            test:"QS PROP"
+        }
+    },
+    {
         path:"/dashboard",
         component:Dashboard,
         exact:true,
+        protected:true,
         props:{
             test:"DASHBOARD"
         }
@@ -20,6 +30,7 @@ const routes =[
     {
         path:"/dashboard/trade",
         component:Dashboard,
+        protected:true,
         exact:true,
         props:{
             test:"TRADE"
@@ -28,6 +39,7 @@ const routes =[
     {
         path:"/dashboard/profileSettings",
         component:Dashboard,
+        protected:true,
         exact:true,
         props:{
             test:"SETTINGS"
@@ -36,6 +48,7 @@ const routes =[
     {
         path:"/dashboard/reports",
         component:Dashboard,
+        protected:true,
         exact:true,
         props:{
             test:"REPORTS"
