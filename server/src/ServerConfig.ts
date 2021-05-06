@@ -10,6 +10,8 @@ import { Connection, Like } from "typeorm";
 import RootRouter from "./api/RootRouter";
 import SERVER_CONFIG from "./config/server.config";
 import Response from "./config/HttpResponse";
+import get from "axios";
+
 export type IServerConfig = InstanceType<typeof ServerConfig>
 export class ServerConfig{
     _context:string = "ServerConfig"
@@ -48,11 +50,25 @@ export class ServerConfig{
             });
         }
         this.app.get("/request_c_code",(req,res)=>{
-            res.status(Response.OK.status).json({
+            const payload = {
                 message:Response.OK.message,
-                c_code:SERVER_CONFIG["APP_IW_QS_CLIENT_CODE"],
-                url:SERVER_CONFIG["APP_IW_QS_API_AUTH"],
-                callbackUri:SERVER_CONFIG["APP_QS_AUTH_CALLBACK_URL"]
+                refreshToken:SERVER_CONFIG["APP_IW_QS_REFRESH_TOKEN"],
+                qsAuthUrl:SERVER_CONFIG["APP_IW_QS_API_AUTH"],
+                callbackUrl:SERVER_CONFIG["APP_QS_AUTH_CALLBACK_URL"],
+                consumerKey:SERVER_CONFIG["APP_IW_QS_CONSMER_KEY"]
+            }
+            console.log(payload)
+            res.status(Response.OK.status).json(payload)
+        })
+        this.app.get("/test",(req,res)=>{
+            get("https://api07.iq.questrade.com/v1/accounts/52310463/positions", {
+            headers: {
+                // 'Content-Type': 'application/json',
+                // "Access-Control-Allow-Origin":"ORIGIN",
+                'Authorization':'Bearer DhgBfdS5COzm-5iJWl4N_PsoE_FHVUUF0'
+            }
+            }).then(response=>{
+                console.log(response.data)
             })
         })
     }

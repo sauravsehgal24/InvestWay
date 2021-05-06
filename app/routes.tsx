@@ -11,7 +11,7 @@ const routes =[
         }
     },
     {
-        path:"/qs_callback/:code",
+        path:"/:code",
         component:QsProcessRedirect,
         exact:true,
         props:{

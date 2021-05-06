@@ -1,6 +1,7 @@
 import { Connection } from "typeorm";
 import * as express from "express";
 import { UserRouter } from "./UserRouter";
+import { QsRouter } from "./QsRouter";
 
 export default class RootRouter {
     private rootRouter: any;
@@ -23,6 +24,9 @@ export default class RootRouter {
           {
             route: "/user",
             cb: new UserRouter(this.connection).getuserRoutes,
+          },{
+            route: "/qs",
+            cb: new QsRouter(this.connection).getQsRoutes,
           }
         ]);
     

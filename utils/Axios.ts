@@ -1,8 +1,12 @@
-import * as axios from 'axios'
-import { AxiosResponse } from '../server/src';
+import post from "axios";
 
-export class _AxiosRequest{
-    static get = async ():Promise<AxiosResponse> =>{
-
-    }
+export async function _post<T>(url,headers?,body?): Promise<T>{
+    console.log("in post -----------")
+    return post( url ).then(res=>{
+        return res.data as unknown as T
+    }).catch(err=>{
+        console.log("----------------------")
+        return err as unknown as T
+    })      
 }
+   

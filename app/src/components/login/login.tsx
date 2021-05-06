@@ -20,9 +20,10 @@ type LoginProps = AbstractProps & {
     test:string,
 }
 type qsServerRes = {
-    cCode:string,
+    refreshToken:string,
     qsAuthUrl:string,
-    callBackUri:string
+    callbackUrl:string,
+    consumerKey:string
 }
 const Login:React.FC<LoginProps> = (props:LoginProps)=>{
     const [viewerLogin,setViewerLogin] = React.useState(false)
@@ -31,38 +32,50 @@ const Login:React.FC<LoginProps> = (props:LoginProps)=>{
     const handleViewerLoginModal = ()=>{
         setViewerLogin(false)
     }
-    const _qsRequestClientCode = async () =>{
-       get(`${process.env.REACT_APP_LOOPBACK}/request_c_code`).then(async res=>{
-           if(res.status === 200 && res.data){
-                const cCode=res.data.c_code.toString()
-                const callBackUri = res.data.callbackUri.toString()
-                let qsApiAuthUrl = res.data.url.toString().replace(/CLIENT_ID/,cCode)
-                qsApiAuthUrl = qsApiAuthUrl.replace(/REDIRECT_URI/,callBackUri)
-                setQsData({
-                    cCode:cCode,
-                    qsAuthUrl:qsApiAuthUrl,
-                    callBackUri:callBackUri
-                })
-            //props.history.push(`/qs_callback/${c_code}`);
-           }
-       }).catch(err=>{
-           console.log(err)
-       })
-    }
-
-    React.useEffect(()=>{
-        if(qsData && qsData.qsAuthUrl)
-        initQsLogin().then(res=>{
-            console.log("asdasdsda")
+    const date = new Date("2020-08-25") 
+    
+    const _qsRequestClientCode = ()=>{
+        get(`${process.env.REACT_APP_API}/qs/qs_auth_deal`).then(res=>{
+            console.log(res.data)
         })
-    },[qsData])
-   // https://login.questrade.com/oauth2/authorize?client_id=LWjXJs0BXPyhNnFQ58N-DKo6qr2Y892G0&response_type=code&redirect_uri=http://localhost:3001/qs_callback
-    const initQsLogin = async()=>{
-        if(qsData && qsData.qsAuthUrl){
-            console.log(qsData.qsAuthUrl)
-            window.location = qsData.qsAuthUrl as unknown as Location
-        }
     }
+    // const _qsRequestClientCode = async () =>{
+    //    get(`${process.env.REACT_APP_LOOPBACK}/request_c_code`).then(async res=>{
+    //        if(res.status === 200 && res.data){
+    //             const refreshToken=res.data.refreshToken.toString()
+    //             const callbackUrl = res.data.callbackUrl.toString()
+    //             const consumerKey = res.data.consumerKey.toString()
+    //             let qsApiAuthUrl = res.data.qsAuthUrl.toString().replace(/CLIENT_ID/,consumerKey)
+    //             qsApiAuthUrl = qsApiAuthUrl.replace(/REDIRECT_URI/,callbackUrl)
+    //             console.log(qsApiAuthUrl)
+    //             setQsData({
+    //                 refreshToken:refreshToken,
+    //                 qsAuthUrl:qsApiAuthUrl,
+    //                 callbackUrl:callbackUrl,
+    //                 consumerKey:consumerKey
+    //             })
+    //         //props.history.push(`/qs_callback/${c_code}`);
+    //        }
+    //    }).catch(err=>{
+    //        console.log("-----------------------------")
+    //        console.log(err)
+    //    })
+    // }
+
+    // React.useEffect(()=>{
+    //     if(qsData && qsData.qsAuthUrl)
+    //     initQsLogin().then(res=>{
+    //         console.log("asdasdsda")
+    //     })
+    // },[qsData])
+   // https://login.questrade.com/oauth2/authorize?client_id=LWjXJs0BXPyhNnFQ58N-DKo6qr2Y892G0&response_type=code&redirect_uri=http://localhost:3001/qs_callback
+    // const initQsLogin = async()=>{
+    //     if(qsData && qsData.qsAuthUrl){
+    //         window.location = qsData.qsAuthUrl as unknown as Location
+    //     }
+    // }
+
+   
     return (
         <Grid style={{height:"100vh",backgroundImage:"url(../../../assets/images/loginBg.jpg)", backgroundRepeat:"no-repeat",backgroundSize:"100% 100vh"}} container alignItems="center" justify="center" direction="column" >
             <Button onClick={()=>{_qsRequestClientCode()}} startIcon={<VpnKeyIcon />} style={{marginTop:"2%",backgroundColor: "#00a152",}}className={classes.buttonsMeta} variant="contained" size="large" >Login with Questrade</Button>

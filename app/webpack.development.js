@@ -1,7 +1,7 @@
 var webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+console.log(`${path.resolve(__dirname, "../utils/Axios.ts")}`);
 module.exports = {
   entry: "./index.tsx",
   mode: "development",
@@ -15,6 +15,10 @@ module.exports = {
       {
         test: /\.tsx$|\.ts$/,
         exclude: /node_modules/,
+        include: [
+          `${path.resolve(__dirname, "../utils/Axios.ts")}`,
+          `${path.resolve(__dirname)}`,
+        ],
         use: "ts-loader",
       },
       {
