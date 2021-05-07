@@ -1,11 +1,12 @@
 import * as React from "react";
 import Grid from "@material-ui/core/Grid";
-import { Button, makeStyles } from "@material-ui/core";
-import ViewerLogin from "./viewerLoginModal";
+import { Box, Button, makeStyles, Typography } from "@material-ui/core";
+import UserLogin from "./userLoginModal";
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import PersonIcon from '@material-ui/icons/Person';
 import get from "axios";
 import {AbstractProps} from '../../../..';
+import { _get } from "../../../../utils/Axios";
 
 const useStyles = makeStyles((theme) => ({
     buttonsMeta: {
@@ -14,8 +15,13 @@ const useStyles = makeStyles((theme) => ({
       height:"70px",
       width:"350px"
     },
+    box:{
+        height:"100vh",
+        backgroundImage:"url(../../../assets/images/loginBg.jpg)",
+        backgroundRepeat:"no-repeat",
+        backgroundSize:"100% 100vh"
+    }
   }));
-
 type LoginProps = AbstractProps & {
     test:string,
 }
@@ -26,18 +32,21 @@ type qsServerRes = {
     consumerKey:string
 }
 const Login:React.FC<LoginProps> = (props:LoginProps)=>{
-    const [viewerLogin,setViewerLogin] = React.useState(false)
+    const [userLogin,setUserLogin] = React.useState({open:false,type:""})
     const [qsData,setQsData] = React.useState({} as qsServerRes)
     const classes = useStyles()
-    const handleViewerLoginModal = ()=>{
-        setViewerLogin(false)
+    const handleUserLoginModal = ()=>{
+        setUserLogin({open:false,type:""})
     }
-    const date = new Date("2020-08-25") 
     
-    const _qsRequestClientCode = ()=>{
-        get(`${process.env.REACT_APP_API}/qs/qs_auth_deal`).then(res=>{
-            console.log(res.data)
-        })
+    // const _qsRequestClientCode = ()=>{
+    //     _get(`${process.env.REACT_APP_API}/qs/qs_auth_deal`).then(res=>{
+    //         console.log(res)
+    //     })
+    // }
+
+    const _handleModal = (type:string)=>{
+            setUserLogin({open:true,type:type})
     }
     // const _qsRequestClientCode = async () =>{
     //    get(`${process.env.REACT_APP_LOOPBACK}/request_c_code`).then(async res=>{
@@ -76,12 +85,28 @@ const Login:React.FC<LoginProps> = (props:LoginProps)=>{
     // }
 
    
+    // return (
+    //     <Grid style={{height:"100vh",backgroundImage:"url(../../../assets/images/loginBg.jpg)", backgroundRepeat:"no-repeat",backgroundSize:"100% 100vh"}} container alignItems="center" justify="center" direction="column" >
+    //         <Button onClick={()=>{_handleModal("QS")}} startIcon={<VpnKeyIcon />} style={{marginTop:"2%",backgroundColor: "#00a152",}}className={classes.buttonsMeta} variant="contained" size="large" >Login with Questrade</Button>
+    //         <Button onClick={()=>{_handleModal("USER")}} startIcon={<PersonIcon />} className={classes.buttonsMeta} style={{marginTop:"1%"}} size="large" variant="contained" color="secondary">User Login</Button>
+    //         <UserLogin open={userLogin.open} type={userLogin.type} handleUserLoginModal={handleUserLoginModal}></UserLogin>
+    //     </Grid>
+    // )
+
     return (
-        <Grid style={{height:"100vh",backgroundImage:"url(../../../assets/images/loginBg.jpg)", backgroundRepeat:"no-repeat",backgroundSize:"100% 100vh"}} container alignItems="center" justify="center" direction="column" >
-            <Button onClick={()=>{_qsRequestClientCode()}} startIcon={<VpnKeyIcon />} style={{marginTop:"2%",backgroundColor: "#00a152",}}className={classes.buttonsMeta} variant="contained" size="large" >Login with Questrade</Button>
-            <Button startIcon={<PersonIcon />} className={classes.buttonsMeta} style={{marginTop:"1%"}} size="large" variant="contained" color="secondary">Viewer Login</Button>
-            <ViewerLogin open={viewerLogin} handleViewerLoginModal={handleViewerLoginModal}></ViewerLogin>
-        </Grid>
+        <React.Fragment>
+        <Box
+        display="flex"
+        justifyContent="center"
+        flexDirection="column"
+        alignItems="center"
+        className={classes.box}
+      >
+        <Button onClick={()=>{_handleModal("QS")}} startIcon={<VpnKeyIcon />} style={{marginTop:"2%",backgroundColor: "#00a152",}}className={classes.buttonsMeta} variant="contained" size="large" ><Typography variant="button">Login With Questrade</Typography></Button>
+        <Button onClick={()=>{_handleModal("USER")}} startIcon={<PersonIcon />} className={classes.buttonsMeta} style={{marginTop:"1%"}} size="large" variant="contained" color="secondary"><Typography variant="button">User Login</Typography></Button>
+    </Box>
+    <UserLogin open={userLogin.open} type={userLogin.type} handleUserLoginModal={handleUserLoginModal}></UserLogin>
+    </React.Fragment>
     )
 }
 

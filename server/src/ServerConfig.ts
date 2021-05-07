@@ -71,6 +71,7 @@ export class ServerConfig{
                 console.log(response.data)
             })
         })
+        
     }
     private injectMiddleware = () =>{
         this.app.use(bodyParser.urlencoded({ extended: false }));

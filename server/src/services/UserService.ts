@@ -9,6 +9,10 @@ export class UserService{
         this.connection = connection;
         this._userRepo = this.connection.getRepository(User);
     }
+    public findUserByEmail = async (email:string) =>{
+        const user = await this._userRepo.findOne({email:email}) 
+        return user
+    }
     public testUserService = async () =>{
         const users = await this._userRepo.find() 
         return users
