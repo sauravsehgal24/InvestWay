@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
+    "pretify":"prettier --config '.prettierrc'",
     "app:watch": "cd app && webpack serve --config webpack.development.js",
     "server:watch": "cd server && ts-node-dev index.ts",
     "system:watch": "concurrently \"npm run app:watch\" \"npm run server:watch\"",
