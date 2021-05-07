@@ -10,6 +10,11 @@
     "system:watch": "concurrently \"npm run app:watch\" \"npm run server:watch\"",
     "migration:init": "migrate-mongo init",
     "server:watch:g": "gulp watch:server",
+    "husky": {
+      "hooks": {
+          "pre-commit": "lint-staged"
+      }
+  },
     "lint-staged": {
       "**/*": "prettier --write --ignore-unknown"
     }

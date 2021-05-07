@@ -87,17 +87,17 @@ const UserLogin:React.FC<UserLoginProps> = (props:UserLoginProps)=>{
       }
 
       const fadeModal = ()=>{
-        return (
+        return (  
             <React.Fragment>
-            <Typography variant="h3">Login</Typography>
-            <TextField
-              className={classes.textField}
-              value={email}
-              onChange={(event) => handelInput(event, "email")}
-              id="outlined-basic"
-              label="Email"
-              variant="outlined"
-            />
+        <Typography variant="h3">Login</Typography>
+        <TextField
+          className={classes.textField}
+          value={email}
+          onChange={(event) => handelInput(event, "email")}
+          id="outlined-basic"
+          label="Email"
+          variant="outlined"
+        />
             <TextField
               className={classes.textField}
               value={password}
