@@ -11,9 +11,11 @@
         "system:watch": "concurrently \"npm run app:watch\" \"npm run server:watch\"",
         "migration:init": "migrate-mongo init",
         "server:watch:g": "gulp watch:server",
-        "lint-staged": {
-            "**/*": "prettier --write"
-        }
+        "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js -f server/src/connectionConfig.ts",
+        "typeorm:cli": "ts-node --project ./tsconfig.json ./node_modules/typeorm/cli.js -f server/src/connectionConfig.ts",
+        "migration:generate": "npm run typeorm:cli -- migration:generate -n ",
+        "migration:run": "npm run typeorm:cli -- migration:run",
+        "migration:revert": "npm run typeorm:cli -- migration:revert"
     },
     "keywords": [],
     "author": "",
@@ -52,6 +54,7 @@
         "http": "0.0.1-security",
         "https": "^1.0.0",
         "jsonwebtoken": "^8.5.1",
+        "jwt-decode": "^3.1.2",
         "mongodb": "^3.6.6",
         "nodemailer": "^6.6.0",
         "nodemailer-express-handlebars": "^4.0.0",
@@ -64,6 +67,7 @@
         "react-router-dom": "^5.2.0",
         "react-ui-utility": "^1.0.1",
         "redux": "^4.1.0",
+        "redux-thunk": "^2.3.0",
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
         "save": "^2.4.0",

@@ -10,13 +10,23 @@ export class UserRouter extends BaseRouter<IUserService> {
     constructor(connection: Connection) {
         super(connection, "UserRouter");
         this.userService = new UserService(this.connection);
-        this.initiateAllRoutes([this.getAllUsers, this.authUser]);
+        this.initiateAllRoutes([
+            this.getAllUsers,
+            this.authUser,
+            this.getUserById,
+        ]);
     }
 
     // GET - All Users
     private getAllUsers = () => {
-        this.router.get("/", async (req, res) => {
+        this.router.get("/users", async (req, res) => {
             res.send(await this.userService.testUserService());
+        });
+    };
+
+    private getUserById = () => {
+        this.router.get("/", async (req, res) => {
+            res.send(await this.userService.findUserById(req.query.userId));
         });
     };
 
@@ -31,7 +41,7 @@ export class UserRouter extends BaseRouter<IUserService> {
             }
             const isPassowrdCorrect: boolean = await Util.comparePassword(
                 password.toString(),
-                user.password.toString()
+                user.accountSettings.password.toString()
             );
             if (!isPassowrdCorrect) {
                 return res
@@ -39,15 +49,15 @@ export class UserRouter extends BaseRouter<IUserService> {
                     .json({ message: HttpResponse.Forbidden.message });
             }
             const payload = {
-                userId: user._id,
+                userId: user.userId,
                 _id: user._id,
-                email: user.email,
+                email: user.accountSettings.email,
                 role: user.role,
             };
             const token = AuthService.signToken(payload);
             return res
                 .status(HttpResponse.OK.status)
-                .json({ token, isActivated: user.isActivated });
+                .json({ token: token, isActivated: user.isActivated });
         });
     };
 

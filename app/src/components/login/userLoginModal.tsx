@@ -11,8 +11,16 @@ import {
     TextField,
     Typography,
 } from "@material-ui/core";
+import IWButton from "../integrals/button/IWButton";
+import { AbstractProps } from "../../../..";
+import Grow from "@material-ui/core/Grow";
+import store from "../../../global/store/store";
+import {
+    asyncAuth,
+    tryAutoAuthentication,
+} from "../../../global/actions/userAction";
 
-type UserLoginProps = {
+type UserLoginProps = AbstractProps & {
     open: boolean;
     handleUserLoginModal: () => void;
     type: string;
@@ -27,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         backgroundColor: "white ",
-        height: "500px",
+        height: "400px",
         width: "400px",
         display: "flex",
         flexDirection: "column",
@@ -40,19 +48,11 @@ const useStyles = makeStyles((theme) => ({
         fontSize: "15px",
         width: "80%",
         height: "12%",
-        marginTop: "2%",
+        marginTop: "5%",
     },
     textField: {
         width: "80%",
-        marginTop: "3%",
-    },
-    googleButton: {
-        color: "#FFFFFF",
-        fontSize: "15px",
-        width: "80%",
-        height: "12%",
-        marginTop: "2%",
-        marginBottom: "3%",
+        marginTop: "5%",
     },
 }));
 
@@ -91,11 +91,32 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
             setPassword(event.target.value);
         }
     };
-    const auth = () => {
-        console.log(
-            `EMAIL: ${email},  PASSWORD: ${password}, CHECKED: ${checked}`
-        );
+    const auth = async () => {
+        const result = await store.dispatch(asyncAuth({ email, password }));
+        if (!result) {
+            setSnackBarObj({
+                open: true,
+                message: result ? result : "Email or password incorrect",
+            });
+        } else {
+            props.history.push("/user/dashboard");
+            //window.location = (`${process.env.REACT_APP_LOOPBACK}/user/dashboard` as unknown) as Location;
+        }
     };
+
+    React.useEffect(() => {
+        if (
+            localStorage.getItem("email") &&
+            localStorage.getItem("email").trim() !== "" &&
+            localStorage.getItem("password") &&
+            localStorage.getItem("password").trim() !== ""
+        ) {
+            setEmail(localStorage.getItem("email"));
+            setPassword(localStorage.getItem("password"));
+            setChecked(true);
+        }
+        store.dispatch(tryAutoAuthentication("User"));
+    }, []);
 
     const fadeModal = () => {
         return (
@@ -129,14 +150,13 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
                     }
                     label="Save Credentials"
                 />
-                <Button
-                    onClick={() => auth()}
-                    variant="contained"
-                    color="primary"
-                    className={classes.loginButton}
-                >
-                    Login
-                </Button>
+                <IWButton
+                    type="userLogin"
+                    onClickEvent={() => {
+                        auth();
+                    }}
+                    label="Login"
+                />
             </React.Fragment>
         );
     };
@@ -162,7 +182,7 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
                 }}
                 className={classes.modal}
             >
-                <Fade in={props.open}>
+                <Grow in={props.open}>
                     <div className={classes.paper}>
                         {props.type === "QS" ? (
                             <h1>Comming Soon</h1>
@@ -170,7 +190,7 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
                             fadeModal()
                         )}
                     </div>
-                </Fade>
+                </Grow>
             </Modal>
         </React.Fragment>
     );

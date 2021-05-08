@@ -11,6 +11,7 @@ import RootRouter from "./api/RootRouter";
 import SERVER_CONFIG from "./config/server.config";
 import Response from "./config/HttpResponse";
 import get from "axios";
+import { Util } from "./utils/Util";
 
 export type IServerConfig = InstanceType<typeof ServerConfig>;
 export class ServerConfig {
@@ -27,7 +28,7 @@ export class ServerConfig {
     private initiateConfig = (cbs: Function[]) => {
         cbs.map((cb) => cb());
     };
-    public initServer = () => {
+    public initServer = async () => {
         this.enableRoutes();
         if (
             SERVER_CONFIG["IW_NODE_ENV"] === "local" ||

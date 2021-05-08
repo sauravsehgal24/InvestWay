@@ -1,59 +1,45 @@
-import Login from './src/components/login/login';
-import QsProcessRedirect from './src/components/redirect/qsRes';
-import Dashboard from './src/components/userPortal/dashboard';
-const routes =[
+import Login from "./src/components/login/login";
+import PageNotFound from "./src/components/pageNotFound";
+import QsProcessRedirect from "./src/components/redirect/qsRes";
+import Dashboard from "./src/components/userPortal/dashboard";
+import UserLandingPage from "./src/components/userPortal/UserLandingPage";
+const routes = [
     {
-        path:"/",
-        component:Login,
-        exact:true,
-        props:{
-            test:"jam"
-        }
+        path: "/user/dashboard",
+        component: Dashboard,
+        protected: true,
+        exact: true,
+        props: {
+            test: "DASHBOARD ACTUAL",
+        },
     },
     {
-        path:"/:code",
-        component:QsProcessRedirect,
-        exact:true,
-        props:{
-            test:"QS PROP"
-        }
+        path: "/user/reports/deep",
+        component: Dashboard,
+        protected: true,
+        exact: true,
+        props: {
+            test: "DEEP REPORTS",
+        },
     },
     {
-        path:"/dashboard",
-        component:Dashboard,
-        exact:true,
-        protected:true,
-        props:{
-            test:"DASHBOARD"
-        }
+        path: "/user/profileSettings",
+        component: Dashboard,
+        protected: true,
+        exact: true,
+        props: {
+            test: "SETTINGS",
+        },
     },
     {
-        path:"/dashboard/trade",
-        component:Dashboard,
-        protected:true,
-        exact:true,
-        props:{
-            test:"TRADE"
-        }
+        path: "*",
+        component: PageNotFound,
+        protected: false,
+        exact: true,
+        props: {
+            test: "PAGE NOT FOUND",
+        },
     },
-    {
-        path:"/dashboard/profileSettings",
-        component:Dashboard,
-        protected:true,
-        exact:true,
-        props:{
-            test:"SETTINGS"
-        }
-    },
-    {
-        path:"/dashboard/reports",
-        component:Dashboard,
-        protected:true,
-        exact:true,
-        props:{
-            test:"REPORTS"
-        }
-    }
-]
+];
 
-export default routes
+export default routes;
