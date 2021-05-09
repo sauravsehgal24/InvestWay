@@ -12,7 +12,6 @@ type DashboardProps = {
 const Dashboard: React.FC<DashboardProps> = (props) => {
     const user = useSelector<any>((state) => state.userInfo) as any;
     const [userEmail, setUserEmail] = React.useState("");
-    console.log(user);
     React.useEffect(() => {
         if (user) setUserEmail(user.accountSettings.email);
     }, [user]);

@@ -11,11 +11,7 @@ export const asyncAuth = (payload) => {
             payload
         )
             .then((response) => {
-                console.log(`RES`);
-
                 if (response.isActivated) {
-                    console.log(response);
-
                     const { token, isActivated } = response;
                     if (!isActivated) {
                         throw "Please activate your account first";
@@ -32,7 +28,6 @@ export const asyncAuth = (payload) => {
 };
 
 const loadUserInfo = ({ token }, dispatch) => {
-    console.log("LOAD USER");
     const decodedToken = jwtDecode<{ userId: string; exp: string }>(token);
     const { userId, exp } = decodedToken;
 
@@ -42,7 +37,6 @@ const loadUserInfo = ({ token }, dispatch) => {
         },
     })
         .then((res) => {
-            console.log(res);
             const user = res;
             if (!user.isActivated) {
                 throw "Please activate your account first";
@@ -52,6 +46,7 @@ const loadUserInfo = ({ token }, dispatch) => {
             saveUserTokenToLS({ token, exp, role });
         })
         .catch((err) => {
+            console.log("ERROR INSIDE LOAD USER");
             dispatch(_logout());
         });
 };
@@ -59,27 +54,28 @@ const loadUserInfo = ({ token }, dispatch) => {
 const saveUserTokenToLS = (payload) => {
     const { token, exp, role } = payload;
     localStorage.setItem(`investway_token`, token);
-    localStorage.setItem(`investway_token`, exp);
+    localStorage.setItem(`investway_exp`, exp);
 };
 
 export const tryAutoAuthentication = (role) => {
     return function (dispatch) {
-        const token = localStorage.getItem(`liteboardscom_${role}token`);
-        const exp = parseInt(localStorage.getItem(`liteboardscom_${role}exp`));
+        const token = localStorage.getItem(`investway_token`);
+        const exp = parseInt(localStorage.getItem(`investway_exp`));
         // const date = new Date();
         const now = new Date().getTime() / 1000;
-
+        console.log("INSIDE AUTOAUTH");
         if (token && exp - now > 0) {
             console.log("loading user....");
             loadUserInfo({ token }, dispatch);
         } else {
+            console.log("LOGOUT INSIDE AUTO AUTH");
             dispatch(_logout());
         }
     };
 };
 
 // -----------------------------------------------------------------------------------------
-const _logout = () => {
+export const _logout = () => {
     return {
         type: "LOGOUT",
         payload: {},

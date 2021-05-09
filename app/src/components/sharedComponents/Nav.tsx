@@ -14,15 +14,12 @@ import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import SearchIcon from "@material-ui/icons/Search";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-
+import { Link } from "react-router-dom";
+import store from "../../../global/store/store";
+import { _logout } from "../../../global/actions/userAction";
 const useStyles = makeStyles((theme) => ({
     appBar: {
         [theme.breakpoints.up("sm")]: {
@@ -118,9 +115,31 @@ const useStyles = makeStyles((theme) => ({
 const navItems = [
     {
         name: "Dashboard",
+        path: "/user/dashboard",
         icon: (iconProps) => (
             <ListItemIcon>
                 <EqualizerIcon style={{ color: iconProps.color }} />
+            </ListItemIcon>
+        ),
+        iconColor: "#7b85e3",
+        color: "black",
+    },
+    {
+        name: "Settings",
+        path: "/user/profileSettings",
+        icon: (iconProps) => (
+            <ListItemIcon>
+                <SettingsIcon style={{ color: iconProps.color }} />
+            </ListItemIcon>
+        ),
+        iconColor: "#7b85e3",
+        color: "black",
+    },
+    {
+        name: "Logout",
+        icon: (iconProps) => (
+            <ListItemIcon>
+                <ExitToAppIcon style={{ color: iconProps.color }} />
             </ListItemIcon>
         ),
         iconColor: "#7b85e3",
@@ -149,34 +168,50 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
     const drawer = (
         <div>
             <div className={classes.toolbar} />
-            <Divider />
             <List className={classes.list}>
                 {navItems.map((navItem, index) => (
-                    <ListItem
-                        className={classes.listItem}
-                        button
-                        key={navItem.name}
-                        onMouseEnter={() => {
-                            const newObj = {};
-                            setNavItemTextColor({ [navItem.name]: "white" });
-                        }}
-                        onMouseLeave={() => {
-                            setNavItemTextColor({ [navItem.name]: "black" });
+                    <Link
+                        to={navItem.path}
+                        style={{ textDecoration: "none" }}
+                        onClick={() => {
+                            if (navItem.name === "Logout") {
+                                const path = localStorage.getItem("path");
+                                if (path && path.trim() === "") {
+                                    localStorage.removeItem("path");
+                                }
+                                store.dispatch(_logout());
+                            }
                         }}
                     >
-                        {navItem.icon({ color: navItem.iconColor })}
-                        <ListItemText
-                            primary={navItem.name}
-                            style={{
-                                color: navItemTextColor[navItem.name]
-                                    ? navItemTextColor[navItem.name]
-                                    : "black",
+                        <ListItem
+                            className={classes.listItem}
+                            button
+                            key={navItem.name}
+                            onMouseEnter={() => {
+                                const newObj = {};
+                                setNavItemTextColor({
+                                    [navItem.name]: "white",
+                                });
                             }}
-                        ></ListItemText>
-                    </ListItem>
+                            onMouseLeave={() => {
+                                setNavItemTextColor({
+                                    [navItem.name]: "black",
+                                });
+                            }}
+                        >
+                            {navItem.icon({ color: navItem.iconColor })}
+                            <ListItemText
+                                primary={navItem.name}
+                                style={{
+                                    color: navItemTextColor[navItem.name]
+                                        ? navItemTextColor[navItem.name]
+                                        : "black",
+                                }}
+                            ></ListItemText>
+                        </ListItem>
+                    </Link>
                 ))}
             </List>
-            <Divider />
         </div>
     );
 

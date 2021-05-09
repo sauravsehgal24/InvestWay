@@ -14,9 +14,12 @@ import { CssBaseline, makeStyles } from "@material-ui/core";
 import Nav from "./src/components/sharedComponents/Nav";
 import { AbstractProps } from "..";
 import { useSelector } from "react-redux";
+import store from "./global/store/store";
+import { tryAutoAuthentication } from "./global/actions/userAction";
 
 type IAppProps = AbstractProps & {
     context: string;
+    path: string;
 };
 
 // const App: React.FC<AppProps> = () => {
@@ -48,24 +51,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App: React.FC<IAppProps> = (props: IAppProps) => {
-    const UserProtectedRoute = ({ ...rest }) => {
-        const user = useSelector<{ userInfo }>((state) => state.userInfo);
-        return (
-            <Route
-                {...rest}
-                render={(props) =>
-                    user ? (
-                        <Redirect to={`/user/dashboard`} />
-                    ) : (
-                        <Redirect to={`/`} />
-                    )
-                }
-            />
-        );
+    React.useEffect(() => {
+        store.dispatch(tryAutoAuthentication("User"));
+    }, []);
+    const handleSearchPath = () => {
+        const path = localStorage.getItem("path");
+        if (path && path.trim() !== "") {
+            localStorage.removeItem("path");
+        }
     };
     const classes = useStyles();
+    const user = useSelector<{ userInfo }>((state) => state.userInfo);
     return (
         <React.Fragment>
+            {!user ? (
+                <Redirect to={`/`} />
+            ) : (
+                <Redirect
+                    to={
+                        localStorage.getItem("path")
+                            ? `/user/${localStorage.getItem("path")}`
+                            : "/user/dashboard"
+                    }
+                />
+            )}
             <Switch>
                 <Route path="/user" exact={false}>
                     <div className={classes.root}>
@@ -75,12 +84,14 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             <div className={classes.toolbar} />
                             <Switch>
                                 {routes.map((route) => {
-                                    console.log(route);
                                     return (
                                         <Route
                                             path={route.path}
                                             exact={route.exact}
                                             render={(props) => {
+                                                // if (route.path === "*") {
+                                                //     handleSearchPath();
+                                                // }
                                                 return (
                                                     <route.component
                                                         {...props}
@@ -100,6 +111,13 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                     exact={true}
                     render={(props) => {
                         return <Login {...props} />;
+                    }}
+                />
+                <Route
+                    path="*"
+                    render={(props) => {
+                        handleSearchPath();
+                        return <Redirect to={`/`} />;
                     }}
                 />
             </Switch>

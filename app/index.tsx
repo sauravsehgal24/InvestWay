@@ -9,13 +9,15 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import store from "./global/store/store";
 
 const defaultTheme = createMuiTheme(globalThemeObject.globalTheme);
-
+let path = window.location.pathname.substring(6);
+console.log(`PATH = ${path}`);
+localStorage.setItem("path", path);
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <ThemeProvider theme={defaultTheme}>
                 <Router>
-                    <App context="root" />
+                    <App context="root" path={path} />
                 </Router>{" "}
             </ThemeProvider>
         </Provider>

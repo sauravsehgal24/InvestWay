@@ -92,16 +92,20 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
         }
     };
     const auth = async () => {
+        const path = localStorage.getItem("path");
+        if (path && path.trim() !== "") {
+            localStorage.removeItem("path");
+        }
         const result = await store.dispatch(asyncAuth({ email, password }));
         if (!result) {
             setSnackBarObj({
                 open: true,
                 message: result ? result : "Email or password incorrect",
             });
-        } else {
-            props.history.push("/user/dashboard");
-            //window.location = (`${process.env.REACT_APP_LOOPBACK}/user/dashboard` as unknown) as Location;
         }
+        // } else {
+        //     props.history.push("/user/dashboard");
+        // }
     };
 
     React.useEffect(() => {
@@ -115,7 +119,6 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
             setPassword(localStorage.getItem("password"));
             setChecked(true);
         }
-        store.dispatch(tryAutoAuthentication("User"));
     }, []);
 
     const fadeModal = () => {

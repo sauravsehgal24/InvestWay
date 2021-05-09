@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export async function _post<T>(url, headers?, body?): Promise<T> {
-    console.log("in post -----------");
     return axios
         .post(url, body)
         .then((res) => {
@@ -14,7 +13,6 @@ export async function _post<T>(url, headers?, body?): Promise<T> {
 }
 
 export async function _get<T>(url, headers?, body?): Promise<T> {
-    console.log("in get -----------");
     return axios
         .get(url)
         .then((res) => {
