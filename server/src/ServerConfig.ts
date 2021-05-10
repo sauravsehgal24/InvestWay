@@ -12,6 +12,7 @@ import SERVER_CONFIG from "./config/server.config";
 import Response from "./config/HttpResponse";
 import get from "axios";
 import { Util } from "./utils/Util";
+import { CronRouter } from "./api/CronRouter";
 
 export type IServerConfig = InstanceType<typeof ServerConfig>;
 export class ServerConfig {
@@ -50,6 +51,7 @@ export class ServerConfig {
     private enableRoutes = () => {
         const allRoutes = new RootRouter(this.connection).getRoutes();
         this.app.use("/api", allRoutes);
+        this.app.use("/cron", new CronRouter(this.connection).getCronRoutes());
         if (
             SERVER_CONFIG["IW_NODE_ENV"] === "local" ||
             SERVER_CONFIG["IW_NODE_ENV"] === "development"

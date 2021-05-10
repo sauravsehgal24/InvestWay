@@ -69,6 +69,7 @@
         "redux": "^4.1.0",
         "redux-thunk": "^2.3.0",
         "reflect-metadata": "^0.1.13",
+        "request": "^2.88.2",
         "rimraf": "^3.0.2",
         "save": "^2.4.0",
         "style-loader": "^2.0.0",

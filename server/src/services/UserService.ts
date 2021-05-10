@@ -20,7 +20,6 @@ export class UserService {
 
     public findUserById = async (userId) => {
         const user = await this._userRepo.findOne({ userId: userId });
-
         return user;
     };
 

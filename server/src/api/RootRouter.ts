@@ -2,6 +2,7 @@ import { Connection } from "typeorm";
 import * as express from "express";
 import { UserRouter } from "./UserRouter";
 import { QsRouter } from "./QsRouter";
+import { CronRouter } from "./CronRouter";
 
 export default class RootRouter {
     private rootRouter: any;
