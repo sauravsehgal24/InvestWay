@@ -13,6 +13,19 @@ enum Role {
 
 class QsProfileData {}
 
+export class TokenData {
+    @Column({})
+    access_token: string;
+    @Column({})
+    refresh_token: string;
+    @Column({})
+    expires_in: number;
+    @Column({})
+    api_server: string;
+    @Column({})
+    token_type: string;
+}
+
 class QsSettings {
     @Column({})
     maxGenre: number;
@@ -69,6 +82,11 @@ export default class User {
         nullable: false,
     })
     accountSettings: AccountSettings;
+
+    @Column({
+        nullable: false,
+    })
+    tokenData: TokenData;
 
     @Column({
         length: 150,

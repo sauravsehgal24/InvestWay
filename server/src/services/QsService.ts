@@ -8,40 +8,37 @@ import SERVER_CONFIG from "../config/server.config";
 import { _get, _post } from "../../../utils/Axios";
 import { QsTokenDealResponse, TokenDealData } from "../";
 import { IUserService, UserService } from "./UserService";
+import User, { TokenData } from "../entity/User";
 
 export type IQsService = InstanceType<typeof QsService>;
 export class QsService {
     private connection: Connection;
     private _qs: TokenDealData;
     private userService: IUserService;
+    private _user: User;
     constructor(connection: Connection) {
         this.connection = connection;
         this.userService = new UserService(this.connection);
     }
     private initTokenDeal = async (
-        rToken: string
+        rToken?: string
     ): Promise<QsTokenDealResponse | void> => {
-        console.log(`URL: ${SERVER_CONFIG["SERVER_IW_QS_API_DEAL"]}${rToken}`);
+        const userInfo = await this.userService.findUserByEmail(
+            "sauravsehgal44@gmail.com"
+        );
+        const refreshToken = (await userInfo).tokenData.refresh_token;
 
-        // request.post(
-        //     `${SERVER_CONFIG["SERVER_IW_QS_API_DEAL"]}${rToken}}`,
-        //     (err, res, body) => {
-        //         if (err) {
-        //             console.log("ERROR IN CALL");
-        //             console.log(err);
-        //         } else {
-        //             console.log("RES IN CALL");
-        //             console.log(res);
-        //         }
-        //     }
-        // );
-
-        const url = SERVER_CONFIG["SERVER_IW_QS_API_DEAL"] + rToken;
+        const url = SERVER_CONFIG["SERVER_IW_QS_API_DEAL"] + refreshToken;
         return _post<QsTokenDealResponse>(url)
-            .then((result) => {
+            .then(async (result) => {
                 if (result && result.access_token) {
                     this._qs = result;
-                    return result;
+                    const newTokenData: TokenData = this._qs;
+                    const resultUpdate = await this.userService.updateUser(
+                        userInfo.accountSettings.email as string,
+                        newTokenData
+                    );
+                    this._user = resultUpdate as User;
                 }
             })
             .catch((err) => {
@@ -51,14 +48,14 @@ export class QsService {
 
     // root method to perform all the tasks
     public _initiateSync = async (rToken: string) => {
-        return this.initTokenDeal(rToken);
+        return await this.initTokenDeal(rToken);
     };
 
     private syncAccounts = async () => {
-        const ep = `${this._qs.api_server}/v1/accounts`;
+        const ep = this._user.tokenData.api_server + "/v1/accounts";
         _get(ep)
             .then((res) => {
-                console.log(res);
+                this._user.qsProfileData = res;
             })
             .catch((err) => {
                 console.log(

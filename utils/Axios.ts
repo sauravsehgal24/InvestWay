@@ -13,10 +13,10 @@ export async function _post<T>(url, headers?, body?): Promise<T> {
     //     },
     // };
     return axios
-        .post(url, null, {
+        .post(url, body, {
             headers: {
                 Accept: `*/*`,
-                "Content-Length": 0,
+                // "Content-Length": 0,
                 "Content-Type": "application/json",
             },
         })
@@ -24,6 +24,7 @@ export async function _post<T>(url, headers?, body?): Promise<T> {
             return (res.data as unknown) as T;
         })
         .catch((err) => {
+            console.log(err);
             console.log("----------------------");
             return (err as unknown) as T;
         });

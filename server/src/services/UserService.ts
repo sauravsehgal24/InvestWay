@@ -23,6 +23,19 @@ export class UserService {
         return user;
     };
 
+    public updateUser = async (email, payload, options?) => {
+        const updateDoc = {
+            $set: {
+                tokenData: payload,
+            },
+        };
+        return this._userRepo.findOneAndUpdate(
+            { "accountSettings.email": email },
+            updateDoc,
+            { upsert: false, returnOriginal: false }
+        );
+    };
+
     public testUserService = async () => {
         const user = await this._userRepo.find();
         return user;
