@@ -46,6 +46,9 @@ module.exports = {
             "process.env.REACT_APP_API": JSON.stringify(
                 "http://localhost:3000/api"
             ),
+            "process.env.REACT_APP_SERVER": JSON.stringify(
+                "http://localhost:3000"
+            ),
             "process.env.REACT_APP_LOOPBACK": JSON.stringify(
                 "http://localhost:3001"
             ),

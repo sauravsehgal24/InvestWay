@@ -4,6 +4,7 @@ import { Util } from "../utils/Util";
 import HttpResponse from "../config/HttpResponse";
 import { AuthService } from "../services/AuthService";
 import { QsService } from "../services/QsService";
+import { UserService } from "../services/UserService";
 
 export class CronRouter {
     private _context = "CronRouter";
@@ -17,14 +18,18 @@ export class CronRouter {
     public qsSync = async () => {
         this.router.get("/qsSync", async (req, res) => {
             const qsService = new QsService(this.connection);
-            const tokenDealData = await qsService._initiateSync(
-                req.query.rToken as string
+            const userService = new UserService(this.connection);
+            const userInfo = await userService.findUserByEmail(
+                "sauravsehgal44@gmail.com"
             );
-            if (tokenDealData) {
-                res.send(tokenDealData);
-            } else {
-                res.status(400).json({ error: "ERROR" });
+            if (!userInfo) {
+                return res
+                    .status(HttpResponse.Forbidden.status)
+                    .json({ message: HttpResponse.Forbidden.message });
             }
+            qsService._initiateSync(userInfo).then((updatedUser) => {
+                res.status(HttpResponse.OK.status).json({ updatedUser });
+            });
         });
     };
 

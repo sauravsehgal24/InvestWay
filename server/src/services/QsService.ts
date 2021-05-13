@@ -1,11 +1,9 @@
 // https://www.questrade.com/api/documentation
 
 import { Connection } from "typeorm";
-import get from "axios";
 var request = require("request");
-import post from "axios";
 import SERVER_CONFIG from "../config/server.config";
-import { _get, _post } from "../../../utils/Axios";
+import { _apiCall } from "../../../utils/Axios";
 import { QsTokenDealResponse, TokenDealData } from "../";
 import { IUserService, UserService } from "./UserService";
 import User, { TokenData } from "../entity/User";
@@ -13,7 +11,6 @@ import User, { TokenData } from "../entity/User";
 export type IQsService = InstanceType<typeof QsService>;
 export class QsService {
     private connection: Connection;
-    private _qs: TokenDealData;
     private userService: IUserService;
     private _user: User;
     constructor(connection: Connection) {
@@ -21,24 +18,16 @@ export class QsService {
         this.userService = new UserService(this.connection);
     }
     private initTokenDeal = async (
-        rToken?: string
+        refreshToken: string
     ): Promise<QsTokenDealResponse | void> => {
-        const userInfo = await this.userService.findUserByEmail(
-            "sauravsehgal44@gmail.com"
-        );
-        const refreshToken = (await userInfo).tokenData.refresh_token;
-
         const url = SERVER_CONFIG["SERVER_IW_QS_API_DEAL"] + refreshToken;
-        return _post<QsTokenDealResponse>(url)
+        console.log(url);
+        return _apiCall<QsTokenDealResponse>("POST", url)
             .then(async (result) => {
-                if (result && result.access_token) {
-                    this._qs = result;
-                    const newTokenData: TokenData = this._qs;
-                    const resultUpdate = await this.userService.updateUser(
-                        userInfo.accountSettings.email as string,
-                        newTokenData
-                    );
-                    this._user = resultUpdate as User;
+                if (result.data && result.data.access_token) {
+                    console.log(`\nTOKEN DATA\n`);
+                    console.log(result.data);
+                    return result.data;
                 }
             })
             .catch((err) => {
@@ -47,15 +36,40 @@ export class QsService {
     };
 
     // root method to perform all the tasks
-    public _initiateSync = async (rToken: string) => {
-        return await this.initTokenDeal(rToken);
+    public _initiateSync = async (userInfo: User) => {
+        const newTokenData = (await this.initTokenDeal(
+            userInfo.tokenData.refresh_token
+        )) as TokenData;
+        return this.syncAccounts(newTokenData)
+            .then(async (result) => {
+                return result;
+            })
+            .catch((err) => {
+                throw "ERROR SYNCING ACCOUNTS";
+            });
     };
 
-    private syncAccounts = async () => {
-        const ep = this._user.tokenData.api_server + "/v1/accounts";
-        _get(ep)
-            .then((res) => {
-                this._user.qsProfileData = res;
+    private syncAccounts = async (tokenData: TokenData) => {
+        if (!tokenData) {
+            throw "ERROR NO TOKEN DATA FOUND";
+        }
+        const ep = tokenData.api_server + "v1/accounts";
+        _apiCall("GET", ep, {
+            Authorization: `Bearer ${tokenData.access_token}`,
+        })
+            .then(async (res: any) => {
+                console.log(`\nACCOUNTS DATA\n`);
+                console.log(res.data);
+                const payload = {
+                    "qsProfileData.accounts": [...res.data.accounts],
+                    tokenData: { ...tokenData },
+                };
+                const updatedUser = await this.userService.updateUser(
+                    "sauravsehgal44@gmail.com",
+                    payload,
+                    true
+                );
+                return updatedUser;
             })
             .catch((err) => {
                 console.log(

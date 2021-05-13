@@ -4,6 +4,7 @@ import { Button, Box, makeStyles } from "@material-ui/core";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import PersonIcon from "@material-ui/icons/Person";
 import { useSelector } from "react-redux";
+import { _apiCall } from "../../../../utils/Axios";
 
 type DashboardProps = {
     test: string;
@@ -15,10 +16,32 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
     React.useEffect(() => {
         if (user) setUserEmail(user.accountSettings.email);
     }, [user]);
+
+    const syncCall = () => {
+        _apiCall("GET", `${process.env.REACT_APP_SERVER}/cron/qsSync`, {
+            Authorization: `Bearer ${localStorage.getItem("investway_token")}`,
+        })
+            .then((res) => {
+                console.log(`\n\RES FROM SYNC CALL\n\n`);
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(`\n\nERROR IN SYNC CALL\n\n`);
+                console.log(err);
+            });
+    };
+
     return (
         <React.Fragment>
             <h1>{props.test}</h1>
             <h1>{userEmail}</h1>
+            <Button
+                onClick={() => syncCall()}
+                color="primary"
+                variant="contained"
+            >
+                Sync
+            </Button>
         </React.Fragment>
     );
 };

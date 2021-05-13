@@ -23,17 +23,25 @@ export class UserService {
         return user;
     };
 
-    public updateUser = async (email, payload, options?) => {
+    public updateUser = async (email, payload, upsert?) => {
         const updateDoc = {
-            $set: {
-                tokenData: payload,
-            },
+            $set: { ...payload },
         };
-        return this._userRepo.findOneAndUpdate(
-            { "accountSettings.email": email },
-            updateDoc,
-            { upsert: false, returnOriginal: false }
-        );
+        return this._userRepo
+            .findOneAndUpdate(
+                { "accountSettings.email": email },
+                { ...updateDoc },
+                {
+                    upsert: upsert ? upsert : false,
+                    returnOriginal: false,
+                }
+            )
+            .then((result) => {
+                return result;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     public testUserService = async () => {

@@ -1,18 +1,18 @@
-import { AxiosResponse } from "axios";
 import jwtDecode from "jwt-decode";
 import { AuthResponse } from "../../..";
-import { _get, _post } from "../../../utils/Axios";
+import { _apiCall } from "../../../utils/Axios";
 
 export const asyncAuth = (payload) => {
     return function (_d) {
-        return _post<AuthResponse>(
+        return _apiCall<AuthResponse>(
+            "POST",
             `${process.env.REACT_APP_API}/users/auth`,
             null,
             payload
         )
             .then((response) => {
-                if (response.isActivated) {
-                    const { token, isActivated } = response;
+                if (response.data.isActivated) {
+                    const { token, isActivated } = response.data;
                     if (!isActivated) {
                         throw "Please activate your account first";
                     }
@@ -30,14 +30,13 @@ export const asyncAuth = (payload) => {
 const loadUserInfo = ({ token }, dispatch) => {
     const decodedToken = jwtDecode<{ userId: string; exp: string }>(token);
     const { userId, exp } = decodedToken;
-
-    _get<AuthResponse>(`${process.env.REACT_APP_API}/users?userId=${userId}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
+    _apiCall<AuthResponse>(
+        "GET",
+        `${process.env.REACT_APP_API}/users?userId=${userId}`,
+        { Authorization: `Bearer ${token}` }
+    )
         .then((res) => {
-            const user = res;
+            const user = res.data;
             if (!user.isActivated) {
                 throw "Please activate your account first";
             }
