@@ -1,6 +1,23 @@
 import jwtDecode from "jwt-decode";
 import { AuthResponse } from "../../..";
 import { _apiCall } from "../../../utils/Axios";
+import { v4 as uuidv4 } from "uuid";
+
+const generateAuthPsdToken = () => {
+    const tempToken: string = uuidv4();
+};
+
+const isChecked = () => {
+    const email = localStorage.getItem("email");
+    const chkTkn = localStorage.getItem("chkTkn");
+    if (email && email.trim() !== "" && chkTkn && chkTkn.trim() !== "") {
+        const newTkn = uuidv4();
+        localStorage.setItem("athTkn", newTkn);
+        return newTkn;
+    } else {
+        return "";
+    }
+};
 
 export const asyncAuth = (payload) => {
     return function (_d) {
@@ -8,7 +25,12 @@ export const asyncAuth = (payload) => {
             "POST",
             `${process.env.REACT_APP_API}/users/auth`,
             null,
-            payload
+            {
+                ...payload,
+                athTkn: localStorage.getItem("athTkn")
+                    ? localStorage.getItem("athTkn")
+                    : "",
+            }
         )
             .then((response) => {
                 if (response.data.isActivated) {
@@ -16,23 +38,23 @@ export const asyncAuth = (payload) => {
                     if (!isActivated) {
                         throw "Please activate your account first";
                     }
-                    loadUserInfo({ token }, _d);
+                    const newAthTkn = isChecked();
+                    loadUserInfo({ token, newAthTkn }, _d);
                     return "success";
                 }
             })
             .catch((err) => {
-                console.log(`ERROR IN AUTH ACTION -------------------\n${err}`);
                 return null;
             });
     };
 };
 
-const loadUserInfo = ({ token }, dispatch) => {
+const loadUserInfo = ({ token, newAthTkn }, dispatch) => {
     const decodedToken = jwtDecode<{ userId: string; exp: string }>(token);
     const { userId, exp } = decodedToken;
     _apiCall<AuthResponse>(
         "GET",
-        `${process.env.REACT_APP_API}/users?userId=${userId}`,
+        `${process.env.REACT_APP_API}/users?userId=${userId}&athTkn=${newAthTkn}`,
         { Authorization: `Bearer ${token}` }
     )
         .then((res) => {
@@ -65,7 +87,8 @@ export const tryAutoAuthentication = (role) => {
         console.log("INSIDE AUTOAUTH");
         if (token && exp - now > 0) {
             console.log("loading user....");
-            loadUserInfo({ token }, dispatch);
+            const newAthTkn = isChecked();
+            loadUserInfo({ token, newAthTkn }, dispatch);
         } else {
             console.log("LOGOUT INSIDE AUTO AUTH");
             dispatch(_logout());

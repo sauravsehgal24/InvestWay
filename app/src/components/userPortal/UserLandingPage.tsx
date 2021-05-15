@@ -24,12 +24,12 @@ const UserLandingPage: React.FC<IUserLandingPageProps> = (
     return (
         <React.Fragment>
             <div className={classes.root}>
-                <CssBaseline />
+                {/* <CssBaseline />
                 <Nav {...props} />
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <h1>BODY</h1>
-                </main>
+                </main> */}
             </div>
         </React.Fragment>
     );

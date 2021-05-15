@@ -18,8 +18,27 @@ export class UserService {
         return user;
     };
 
-    public findUserById = async (userId) => {
-        const user = await this._userRepo.findOne({ userId: userId });
+    public findUserById = async (req) => {
+        let user;
+        const { userId, athTkn } = req.query;
+        if (athTkn.trim() !== "") {
+            user = (
+                await this._userRepo.findOneAndUpdate(
+                    {
+                        userId: userId,
+                    },
+                    {
+                        $set: { "accountSettings.athTkn": athTkn },
+                    },
+                    {
+                        upsert: true,
+                        returnOriginal: false,
+                    }
+                )
+            ).value;
+        } else {
+            user = await this._userRepo.findOne({ userId: userId });
+        }
         return user;
     };
 
@@ -41,6 +60,25 @@ export class UserService {
             })
             .catch((err) => {
                 console.log(err);
+            });
+    };
+
+    public verifyAthTkn = (email: string, tkn: string) => {
+        return this._userRepo
+            .findOne({
+                where: {
+                    "accountSettings.email": email,
+                },
+            })
+            .then((user) => {
+                if ((user as User).accountSettings.athTkn === tkn)
+                    return (user as User).accountSettings.password;
+                else {
+                    throw "Tkn didn't matched";
+                }
+            })
+            .catch((err) => {
+                return err;
             });
     };
 

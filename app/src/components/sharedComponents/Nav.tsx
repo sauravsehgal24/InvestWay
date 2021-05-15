@@ -20,6 +20,7 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import { Link } from "react-router-dom";
 import store from "../../../global/store/store";
 import { _logout } from "../../../global/actions/userAction";
+import { Typography } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
     appBar: {
         [theme.breakpoints.up("sm")]: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
         },
         backgroundColor: "#f9f9f9",
         boxShadow: "none",
+        color: "Black",
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -112,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: "7%",
     },
 }));
+
 const navItems = [
     {
         name: "Dashboard",
@@ -147,7 +150,9 @@ const navItems = [
     },
 ];
 
-type INavProps = AbstractProps & {};
+type INavProps = AbstractProps & {
+    path: string;
+};
 const drawerWidth = 280;
 
 const Nav: React.FC<INavProps> = (props: INavProps) => {
@@ -155,7 +160,13 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [navItemTextColor, setNavItemTextColor] = React.useState({} as any);
-
+    const [currentHeading, setCurrentHeading] = React.useState(
+        {
+            dashboard: "Dashboard",
+            profileSettings: "Settings",
+            "reports/deep": "Reports",
+        }[props.path || "dashboard"]
+    );
     const logout = () => {
         //dispatch(userActions._auth());
         //props.history.push('/login/admin')
@@ -174,12 +185,18 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         to={navItem.path}
                         style={{ textDecoration: "none" }}
                         onClick={() => {
+                            setCurrentHeading(navItem.name);
                             if (navItem.name === "Logout") {
                                 const path = localStorage.getItem("path");
                                 if (path && path.trim() === "") {
                                     localStorage.removeItem("path");
                                 }
                                 store.dispatch(_logout());
+                            } else {
+                                localStorage.setItem(
+                                    "path",
+                                    navItem.path.substring(6)
+                                );
                             }
                         }}
                     >
@@ -229,6 +246,8 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                     >
                         <MenuIcon className={classes.menuIcon} />
                     </IconButton>
+
+                    <Typography variant="h1">{currentHeading}</Typography>
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">

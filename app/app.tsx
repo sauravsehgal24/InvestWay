@@ -79,7 +79,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                 <Route path="/user" exact={false}>
                     <div className={classes.root}>
                         <CssBaseline />
-                        <Nav {...props} />
+                        <Nav {...props} path={localStorage.getItem("path")} />
                         <main className={classes.content}>
                             <div className={classes.toolbar} />
                             <Switch>
@@ -89,9 +89,9 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                                             path={route.path}
                                             exact={route.exact}
                                             render={(props) => {
-                                                // if (route.path === "*") {
-                                                //     handleSearchPath();
-                                                // }
+                                                if (route.path === "*") {
+                                                    handleSearchPath();
+                                                }
                                                 return (
                                                     <route.component
                                                         {...props}

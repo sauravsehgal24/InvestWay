@@ -19,6 +19,9 @@ import {
     asyncAuth,
     tryAutoAuthentication,
 } from "../../../global/actions/userAction";
+import { v4 as uuidv4 } from "uuid";
+import { _apiCall } from "../../../../utils/Axios";
+import { AxiosResponse } from "axios";
 
 type UserLoginProps = AbstractProps & {
     open: boolean;
@@ -64,24 +67,26 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
     const classes = useStyles();
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = React.useState({ val: false, chkTkn: "" });
     const handleChecked = async () => {
         if (
-            !checked &&
+            !checked.val &&
             email.toString().trim() !== "" &&
             password.toString().trim() !== ""
         ) {
             localStorage.setItem("email", email);
-            localStorage.setItem("password", password);
-            setChecked(true);
+            const chk = uuidv4();
+            localStorage.setItem("chkTkn", chk);
+            setChecked({ val: true, chkTkn: chk });
         } else if (
-            checked ||
+            checked.val ||
             email.toString().trim() === "" ||
             password.toString().trim() === ""
         ) {
             localStorage.removeItem("email");
-            localStorage.removeItem("password");
-            setChecked(false);
+            localStorage.removeItem("chkTkn");
+            localStorage.removeItem("athTkn");
+            setChecked({ val: false, chkTkn: "" });
         }
     };
     const handelInput = (event, type) => {
@@ -96,7 +101,9 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
         if (path && path.trim() !== "") {
             localStorage.removeItem("path");
         }
-        const result = await store.dispatch(asyncAuth({ email, password }));
+        const result = await store.dispatch(
+            asyncAuth({ email, password, chkTkn: checked["chkTkn"] })
+        );
         if (!result) {
             setSnackBarObj({
                 open: true,
@@ -112,12 +119,36 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
         if (
             localStorage.getItem("email") &&
             localStorage.getItem("email").trim() !== "" &&
-            localStorage.getItem("password") &&
-            localStorage.getItem("password").trim() !== ""
+            localStorage.getItem("chkTkn") &&
+            localStorage.getItem("chkTkn").trim() !== ""
         ) {
             setEmail(localStorage.getItem("email"));
-            setPassword(localStorage.getItem("password"));
-            setChecked(true);
+            setChecked({ val: true, chkTkn: localStorage.getItem("chkTkn") });
+            if (
+                localStorage.getItem("athTkn") &&
+                localStorage.getItem("athTkn").trim() !== ""
+            ) {
+                const chkTknAuthUrl =
+                    process.env.REACT_APP_API +
+                    "/users/rqpsd?athTkn=" +
+                    localStorage.getItem("athTkn") +
+                    "&email=" +
+                    localStorage.getItem("email");
+                _apiCall<AxiosResponse>("GET", chkTknAuthUrl)
+                    .then((res) => {
+                        const { isOk, psd } = res.data;
+                        if (isOk) {
+                            setPassword(psd);
+                        } else {
+                            setPassword(uuidv4());
+                        }
+                    })
+                    .catch((err) => {
+                        setPassword(uuidv4());
+                    });
+            } else {
+                setPassword(uuidv4());
+            }
         }
     }, []);
 
@@ -147,7 +178,7 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
                         <Checkbox
                             name="checked"
                             color="primary"
-                            checked={checked}
+                            checked={checked.val}
                             onChange={handleChecked}
                         />
                     }

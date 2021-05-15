@@ -33,7 +33,7 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
 
     return (
         <React.Fragment>
-            <h1>{props.test}</h1>
+            {props.test}
             <h1>{userEmail}</h1>
             <Button
                 onClick={() => syncCall()}

@@ -60,6 +60,9 @@ class AccountSettings {
     password: string;
 
     @Column({ type: "varchar", length: 150, nullable: true })
+    athTkn: string;
+
+    @Column({ type: "varchar", length: 150, nullable: true })
     address: string;
 
     @Column({ type: "varchar", length: 150, nullable: true })
