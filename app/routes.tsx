@@ -32,6 +32,33 @@ const routes = [
         },
     },
     {
+        path: "/user/positions",
+        component: Dashboard,
+        protected: true,
+        exact: true,
+        props: {
+            test: "POSITIONS",
+        },
+    },
+    {
+        path: "/user/executions",
+        component: Dashboard,
+        protected: true,
+        exact: true,
+        props: {
+            test: "EXECUTIONS",
+        },
+    },
+    {
+        path: "/user/orders",
+        component: Dashboard,
+        protected: true,
+        exact: true,
+        props: {
+            test: "ORDERS",
+        },
+    },
+    {
         path: "*",
         component: PageNotFound,
         protected: false,

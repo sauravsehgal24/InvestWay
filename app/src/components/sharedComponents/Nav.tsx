@@ -20,7 +20,11 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import { Link } from "react-router-dom";
 import store from "../../../global/store/store";
 import { _logout } from "../../../global/actions/userAction";
-import { Typography } from "@material-ui/core";
+import { Typography, Avatar } from "@material-ui/core";
+import AvTimerIcon from "@material-ui/icons/AvTimer";
+import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
+import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
+
 const useStyles = makeStyles((theme) => ({
     appBar: {
         [theme.breakpoints.up("sm")]: {
@@ -78,23 +82,20 @@ const useStyles = makeStyles((theme) => ({
     },
     listText: {
         color: "black",
-        "&:hover": {
-            color: "white",
-        },
     },
     listItem: {
         backgroundColor: "#e8e8e8",
         height: "70px",
         transition: "width 0.5s, height 0.2s",
         "&:hover": {
-            backgroundColor: "#9561ce",
-            ".listText": { color: "white" },
+            backgroundColor: "#75eb95", //"#9561ce",
+            ".listText": { fontSize: "40px" },
             height: "100px",
             width: "100%",
         },
     },
     list: {
-        marginTop: "20%",
+        marginTop: "50%",
     },
     flexToolbar: {
         display: "flex",
@@ -124,6 +125,39 @@ const navItems = [
                 <EqualizerIcon style={{ color: iconProps.color }} />
             </ListItemIcon>
         ),
+        iconColor: "#e3291b",
+        color: "black",
+    },
+    {
+        name: "Positions",
+        path: "/user/positions",
+        icon: (iconProps) => (
+            <ListItemIcon>
+                <BusinessCenterIcon style={{ color: iconProps.color }} />
+            </ListItemIcon>
+        ),
+        iconColor: "#1e5fe3",
+        color: "black",
+    },
+    {
+        name: "Executions",
+        path: "/user/executions",
+        icon: (iconProps) => (
+            <ListItemIcon>
+                <DynamicFeedIcon style={{ color: iconProps.color }} />
+            </ListItemIcon>
+        ),
+        iconColor: "#e38512",
+        color: "black",
+    },
+    {
+        name: "Orders",
+        path: "/user/orders",
+        icon: (iconProps) => (
+            <ListItemIcon>
+                <AvTimerIcon style={{ color: iconProps.color }} />
+            </ListItemIcon>
+        ),
         iconColor: "#7b85e3",
         color: "black",
     },
@@ -135,7 +169,7 @@ const navItems = [
                 <SettingsIcon style={{ color: iconProps.color }} />
             </ListItemIcon>
         ),
-        iconColor: "#7b85e3",
+        iconColor: "#b90ff2",
         color: "black",
     },
     {
@@ -145,7 +179,7 @@ const navItems = [
                 <ExitToAppIcon style={{ color: iconProps.color }} />
             </ListItemIcon>
         ),
-        iconColor: "#7b85e3",
+        iconColor: "#fc4800",
         color: "black",
     },
 ];
@@ -164,6 +198,9 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
         {
             dashboard: "Dashboard",
             profileSettings: "Settings",
+            positions: "Positions",
+            executions: "Executions",
+            orders: "Orders",
             "reports/deep": "Reports",
         }[props.path || "dashboard"]
     );
@@ -207,7 +244,7 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                             onMouseEnter={() => {
                                 const newObj = {};
                                 setNavItemTextColor({
-                                    [navItem.name]: "white",
+                                    [navItem.name]: "black",
                                 });
                             }}
                             onMouseLeave={() => {
@@ -218,13 +255,20 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         >
                             {navItem.icon({ color: navItem.iconColor })}
                             <ListItemText
-                                primary={navItem.name}
+                                //primary={navItem.name}
                                 style={{
                                     color: navItemTextColor[navItem.name]
                                         ? navItemTextColor[navItem.name]
                                         : "black",
                                 }}
-                            ></ListItemText>
+                            >
+                                <Typography
+                                    variant="h5"
+                                    className={classes.listText}
+                                >
+                                    {navItem.name}
+                                </Typography>
+                            </ListItemText>
                         </ListItem>
                     </Link>
                 ))}
