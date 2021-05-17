@@ -11,7 +11,34 @@ enum Role {
     USER = "User",
 }
 
-class QsProfileData {}
+class QsAccount {
+    @Column({})
+    type: string;
+    @Column({})
+    number: number;
+    @Column({})
+    status: string;
+    @Column({})
+    isPrimary: boolean;
+    @Column({})
+    isBilling: boolean;
+    @Column({})
+    clientAccountType: string;
+}
+
+class QsProfileData {
+    @Column({})
+    accounts: Array<QsAccount>;
+
+    @Column({})
+    positions: Array<any>;
+
+    @Column({})
+    executions: Array<any>;
+
+    @Column({})
+    orders: Array<any>;
+}
 
 export class TokenData {
     @Column({})

@@ -42,7 +42,7 @@ export class UserService {
         return user;
     };
 
-    public updateUser = async (email, payload, upsert?) => {
+    public updateUser = async (email, payload, upsert?):Promise<User |void> => {
         const updateDoc = {
             $set: { ...payload },
         };
@@ -56,7 +56,7 @@ export class UserService {
                 }
             )
             .then((result) => {
-                return result;
+                return result.value as User;
             })
             .catch((err) => {
                 console.log(err);

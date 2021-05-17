@@ -8,6 +8,7 @@ import globalThemeObject from "./themes/globalTheme";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import store from "./global/store/store";
 
+//https://embed.plnkr.co/JOI1fpgWIS0lvTeLUxUp/
 const defaultTheme = createMuiTheme(globalThemeObject.globalTheme);
 let path = window.location.pathname.substring(6);
 console.log(`PATH = ${path}`);
