@@ -1,9 +1,12 @@
 import {
     Column,
+    CreateDateColumn,
+    DeleteDateColumn,
     Entity,
     ObjectID,
     ObjectIdColumn,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
 
 enum Role {
@@ -26,7 +29,61 @@ class QsAccount {
     clientAccountType: string;
 }
 
-class QsProfileData {
+export class IndvBalanceDetail {
+    @Column({})
+    currency: string;
+    @Column({})
+    cash: number;
+    @Column({})
+    marketValue: number;
+    @Column({})
+    totalEquity: number;
+    @Column({})
+    buyingPower: number;
+    @Column({})
+    maintenanceExcess: number;
+    @Column({})
+    isRealTime: boolean;
+}
+
+export class BalanceDetail {
+    @Column({})
+    perCurrencyBalances: Array<IndvBalanceDetail>;
+
+    @Column({})
+    combinedBalances: Array<IndvBalanceDetail>;
+
+    @Column({})
+    sodPerCurrencyBalances: Array<IndvBalanceDetail>;
+
+    @Column({})
+    sodCombinedBalances: Array<IndvBalanceDetail>;
+}
+
+export class Balance {
+    @PrimaryGeneratedColumn("uuid")
+    balanceId: string;
+
+    @Column({})
+    detail: BalanceDetail;
+
+    @Column({})
+    openPAndL: number;
+
+    @Column({})
+    recordHistory: Array<Date>;
+
+    @CreateDateColumn()
+    createdDate: Date;
+
+    @UpdateDateColumn()
+    updatedDate: Date;
+
+    @DeleteDateColumn()
+    deletedDate: Date;
+}
+
+export class QsProfileData {
     @Column({})
     accounts: Array<QsAccount>;
 
@@ -38,6 +95,12 @@ class QsProfileData {
 
     @Column({})
     orders: Array<any>;
+
+    @Column({})
+    latestBalance: IndvBalanceDetail & { openPAndL: string };
+
+    @Column({})
+    balances: Array<Balance>;
 }
 
 export class TokenData {
