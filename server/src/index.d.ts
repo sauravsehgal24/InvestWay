@@ -9,3 +9,11 @@ export type TokenDealData = {
     api_server: string;
 };
 export type QsTokenDealResponse = AxiosResponse & TokenDealData;
+
+export interface IEmailData {
+    to: string;
+    from?: string;
+    html: string;
+    subject: string;
+    attachments?: Array<object>;
+}

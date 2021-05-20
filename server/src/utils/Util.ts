@@ -1,5 +1,8 @@
 import * as bcrypt from "bcrypt";
 import * as PasswordGenerator from "generate-password";
+import * as path from "path";
+import * as handlebars from "handlebars";
+import * as fs from "fs";
 
 export class Util {
     private static SALTROUND = 10;
@@ -9,6 +12,14 @@ export class Util {
                 cb();
             });
         }
+    };
+
+    public static compileEmailTemplate = (file: string, replacements) => {
+        const filePath = path.join(file);
+        const source = fs.readFileSync(filePath, "utf-8").toString();
+        const templateDelegate = handlebars.compile(source);
+        const htmlToSend = templateDelegate(replacements);
+        return htmlToSend;
     };
 
     public static generatePassword = () => {

@@ -5,14 +5,19 @@ import HttpResponse from "../config/HttpResponse";
 import { AuthService } from "../services/AuthService";
 import { QsService } from "../services/QsService";
 import { UserService } from "../services/UserService";
+import { EmailService, IEmailService } from "../services/EmailService";
+import * as path from "path";
+import { IEmailData } from "..";
 
 export class CronRouter {
     private _context = "CronRouter";
     private router: express.Router;
     private connection: Connection;
+    private emailService: IEmailService;
     constructor(connection: Connection) {
         this.router = express.Router();
         this.connection = connection;
+        this.emailService = new EmailService();
         Util.initiateAllRoutes([this.qsSync, this.testQsServiceFuncsRoute]);
     }
     public qsSync = async () => {
@@ -27,9 +32,34 @@ export class CronRouter {
                     .status(HttpResponse.Forbidden.status)
                     .json({ message: HttpResponse.Forbidden.message });
             }
-            qsService._initiateSync(userInfo).then((updatedUser) => {
-                res.status(HttpResponse.OK.status).json({ updatedUser });
-            });
+            const replacements = {
+                status: status,
+                error: "",
+                email: "sauravsehgal44@gmail.com",
+            };
+            const filePath = path.join(
+                __dirname,
+                "../views/email/cronStatusTemplate.html"
+            );
+            qsService
+                ._initiateSync(userInfo)
+                .then((updatedUser) => {
+                    res.status(HttpResponse.OK.status).json({ updatedUser });
+                    replacements.status = "CRON COMPLETED";
+                })
+                .catch((err) => {
+                    replacements.status = "CRON FAILED WITH ERR";
+                    replacements.error = err.toString();
+                });
+            const template = Util.compileEmailTemplate(filePath, replacements);
+            const emailData: IEmailData = {
+                from: `admin <admin@investway.alienjack.net>`,
+                to: "sauravsehgal44@gmail.com",
+                subject: `Cron Status`,
+                html: template, // take from templates,
+                attachments: [],
+            };
+            await this.emailService.sendCronMail(emailData);
         });
     };
 
