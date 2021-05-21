@@ -46,29 +46,39 @@ export class ServerConfig {
                 );
             });
         } else if (SERVER_CONFIG["IW_NODE_ENV"] === "production") {
-            this.server = https.createServer(
-                {
-                    key: fs.readFileSync(
-                        path.join(__dirname, "../ssl/iw_key.pem")
-                    ),
-                    cert: fs.readFileSync(
-                        path.join(__dirname, "../ssl/iw_crt.crt")
-                    ),
-                },
-                this.app
-            );
-            this.server.listen(
-                SERVER_CONFIG["SERVER_IW_SERVER_PORT"],
-                function () {
-                    console.log(
-                        "\n---------------------------------------------------------------\nIW " +
-                            SERVER_CONFIG["IW_NODE_ENV"] +
-                            " ts server listening at https://localhost:" +
-                            SERVER_CONFIG["SERVER_IW_SERVER_PORT"] +
-                            "\n---------------------------------------------------------------\n"
-                    );
-                }
-            );
+            this.server = http.createServer(this.app);
+            this.server.listen(SERVER_CONFIG["SERVER_IW_SERVER_PORT"], () => {
+                console.log(
+                    "\n---------------------------------------------------------------\nIW " +
+                        SERVER_CONFIG["IW_NODE_ENV"] +
+                        " ts server listening at http://localhost:" +
+                        SERVER_CONFIG["SERVER_IW_SERVER_PORT"] +
+                        "\n---------------------------------------------------------------\n"
+                );
+            });
+            // this.server = https.createServer(
+            //     {
+            //         key: fs.readFileSync(
+            //             path.join(__dirname, "../../ssl/iw_key.pem")
+            //         ),
+            //         cert: fs.readFileSync(
+            //             path.join(__dirname, "../../ssl/iw_crt.crt")
+            //         ),
+            //     },
+            //     this.app
+            // );
+            // this.server.listen(
+            //     SERVER_CONFIG["SERVER_IW_SERVER_PORT"],
+            //     function () {
+            //         console.log(
+            //             "\n---------------------------------------------------------------\nIW " +
+            //                 SERVER_CONFIG["IW_NODE_ENV"] +
+            //                 " ts server listening at https://localhost:" +
+            //                 SERVER_CONFIG["SERVER_IW_SERVER_PORT"] +
+            //                 "\n---------------------------------------------------------------\n"
+            //         );
+            //     }
+            // );
         }
     };
 
@@ -83,6 +93,18 @@ export class ServerConfig {
             this.app.get("/", (req, res) => {
                 res.send("IW server active!");
             });
+        } else if (SERVER_CONFIG["IW_NODE_ENV"] === "production") {
+            this.app.get("/testui", (req, res) => {
+                res.send("IW server active prod!");
+            });
+            this.app.use(
+                "/",
+                express.static(path.resolve(__dirname, "../../interface"))
+            );
+            this.app.use(
+                "*",
+                express.static(path.resolve(__dirname, "../../interface"))
+            );
         }
         this.app.get("/request_c_code", (req, res) => {
             const payload = {

@@ -7,7 +7,7 @@ import get from "axios";
 import { AbstractProps } from "../../../..";
 import { _get } from "../../../../utils/Axios";
 import IWButton from "../integrals/button/IWButton";
-
+const loginImage = require("../../../assets/images/loginBg.jpg").default;
 const useStyles = makeStyles((theme) => ({
     buttonsMeta: {
         fontSize: "17px",
@@ -17,14 +17,12 @@ const useStyles = makeStyles((theme) => ({
     },
     box: {
         height: "100vh",
-        backgroundImage: "url(../../../assets/images/loginBg.jpg)",
+        backgroundImage: `url("${loginImage}")`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100vh",
     },
 }));
-type LoginProps = AbstractProps & {
-    test: string;
-};
+type LoginProps = AbstractProps & {};
 type qsServerRes = {
     refreshToken: string;
     qsAuthUrl: string;

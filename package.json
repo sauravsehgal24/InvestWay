@@ -15,7 +15,12 @@
         "typeorm:cli": "ts-node --project ./tsconfig.json ./node_modules/typeorm/cli.js -f server/src/connectionConfig.ts",
         "migration:generate": "npm run typeorm:cli -- migration:generate -n ",
         "migration:run": "npm run typeorm:cli -- migration:run",
-        "migration:revert": "npm run typeorm:cli -- migration:revert"
+        "migration:revert": "npm run typeorm:cli -- migration:revert",
+        "build:interface": "cd app && webpack --config webpack.production.js",
+        "build:server": "tsc",
+        "build:system": "concurrently \"rimraf dist\" \"npm run build:interface\" \"npm run build:server\"",
+        "build:gulp:system": "gulp default:build",
+        "test:build:live": "cd dist/server && cross-env NODE_ENV=production node index.js"
     },
     "keywords": [],
     "author": "",
