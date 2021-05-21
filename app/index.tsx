@@ -11,6 +11,9 @@ import store from "./global/store/store";
 //https://embed.plnkr.co/JOI1fpgWIS0lvTeLUxUp/
 const defaultTheme = createMuiTheme(globalThemeObject.globalTheme);
 let path = window.location.pathname.substring(6);
+if (path[path.length - 1] === "/") {
+    path = path.substring(0, path.length - 1);
+}
 console.log(`PATH = ${path}`);
 localStorage.setItem("path", path);
 ReactDOM.render(
