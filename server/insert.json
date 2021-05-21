@@ -1,0 +1,36 @@
+[
+    {
+        "name": "Saurav Sehgal",
+        "role": "User",
+        "isActivated": true,
+        "accountSettings": {
+            "email": "sauravsehgal44@gmail.com",
+            "password": "$2b$10$nUBXB.ilQSa5uED7qZ9G6e/HNFrnxjy.Iz5UQQ.NyhJGwAZHxIbTG",
+            "address": "3 Hawkway Ct",
+            "phone": "2899465058",
+            "profileIcon": "",
+            "qsSettings": {
+                "maxGenre": 10,
+                "maxEquity": 5,
+                "genreVal": 80,
+                "equityVal": 70,
+                "dCombineVal": 170,
+                "genreCount": 5,
+                "equityCount": 2,
+                "dVal": 45.5
+            }
+        },
+        "qsProfileData": {}
+    },
+    {
+        "name": "Sanjeev Puri",
+
+        "role": "Viewer",
+        "isActivated": true,
+        "accountSettings": {
+            "email": "sanjeevpuri@gmail.com",
+            "password": "$2b$10$zZ97V6.3oxD6rS6JQ2PeXO86qB8K2sQr1YxYwnakLF4d0KwnLBmlG",
+            "profileIcon": ""
+        }
+    }
+]
