@@ -97,7 +97,11 @@ export class QsProfileData {
     orders: Array<any>;
 
     @Column({})
-    latestBalance: IndvBalanceDetail & { openPAndL: string };
+    latestBalance: IndvBalanceDetail & {
+        openPAndL: string;
+        createdDate: Date;
+        updatedDate: Date;
+    };
 
     @Column({})
     balances: Array<Balance>;

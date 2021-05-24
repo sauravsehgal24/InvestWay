@@ -88,11 +88,15 @@ const useStyles = makeStyles((theme) => ({
         height: "70px",
         transition: "width 0.5s, height 0.2s",
         "&:hover": {
-            backgroundColor: "#75eb95", //"#9561ce",
-            ".listText": { fontSize: "40px" },
+            backgroundColor: "#a0ebb4",
             height: "100px",
             width: "100%",
         },
+    },
+    listItemOnClickClass: {
+        backgroundColor: "#75eb95",
+        height: "100px",
+        width: "100%",
     },
     list: {
         marginTop: "50%",
@@ -204,11 +208,6 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
             "reports/deep": "Reports",
         }[props.path || "dashboard"]
     );
-    const logout = () => {
-        //dispatch(userActions._auth());
-        //props.history.push('/login/admin')
-        //store.dispatch(actionCreator.logout("CONSUMER"));
-    };
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
@@ -238,7 +237,11 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         }}
                     >
                         <ListItem
-                            className={classes.listItem}
+                            className={
+                                currentHeading === navItem.name
+                                    ? classes.listItemOnClickClass
+                                    : classes.listItem
+                            }
                             button
                             key={navItem.name}
                             onMouseEnter={() => {

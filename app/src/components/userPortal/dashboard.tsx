@@ -12,37 +12,6 @@ type DashboardProps = {
 
 const Dashboard: React.FC<DashboardProps> = (props) => {
     const user = useSelector<any>((state) => state.userInfo) as any;
-    const [userEmail, setUserEmail] = React.useState("");
-    React.useEffect(() => {
-        if (user) setUserEmail(user.accountSettings.email);
-    }, [user]);
-
-    const syncCall = () => {
-        _apiCall("GET", `${process.env.REACT_APP_SERVER}/cron/qsSync`, {
-            Authorization: `Bearer ${localStorage.getItem("investway_token")}`,
-        })
-            .then((res) => {
-                console.log(`\n\RES FROM SYNC CALL\n\n`);
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(`\n\nERROR IN SYNC CALL\n\n`);
-                console.log(err);
-            });
-    };
-
-    return (
-        <React.Fragment>
-            {props.test}
-            <h1>{userEmail}</h1>
-            <Button
-                onClick={() => syncCall()}
-                color="primary"
-                variant="contained"
-            >
-                Sync
-            </Button>
-        </React.Fragment>
-    );
+    return <React.Fragment>{props.test}</React.Fragment>;
 };
 export default Dashboard;

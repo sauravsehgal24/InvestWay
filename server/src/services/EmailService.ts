@@ -1,7 +1,9 @@
 import * as nodemailer from "nodemailer";
 import * as smtpTransport from "nodemailer-smtp-transport";
+import * as path from "path";
 import SERVER_CONFIG from "../config/server.config";
 import { IEmailData } from "../index";
+import { Util } from "../utils/Util";
 
 export type IEmailService = InstanceType<typeof EmailService>;
 export class EmailService {
@@ -30,7 +32,19 @@ export class EmailService {
         return transporter;
     };
 
-    public sendCronMail = async (emailData: IEmailData) => {
+    public sendCronMail = async (replacements) => {
+        const filePath = path.join(
+            __dirname,
+            "../views/email/cronStatusTemplate.html"
+        );
+        const template = Util.compileEmailTemplate(filePath, replacements);
+        const emailData: IEmailData = {
+            from: `admin <admin@investway.alienjack.net>`,
+            to: "sauravsehgal44@gmail.com",
+            subject: `Cron Status`,
+            html: template, // take from templates,
+            attachments: [],
+        };
         console.log(
             `Sending Cron Email with context (${EmailService.context})`
         );
@@ -38,7 +52,7 @@ export class EmailService {
             .sendMail(emailData)
             .then((res) => {
                 console.log(
-                    `\n------------------EMAIl SENT-------------------\n\n${res}\n\n`
+                    `\n------------------EMAIl SENT-------------------\n\n\n\n`
                 );
             })
             .catch((err) => {

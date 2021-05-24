@@ -33,33 +33,25 @@ export class CronRouter {
                     .json({ message: HttpResponse.Forbidden.message });
             }
             const replacements = {
-                status: status,
+                status: "",
                 error: "",
                 email: "sauravsehgal44@gmail.com",
             };
-            const filePath = path.join(
-                __dirname,
-                "../views/email/cronStatusTemplate.html"
-            );
             qsService
                 ._initiateSync(userInfo)
                 .then((updatedUser) => {
                     res.status(HttpResponse.OK.status).json({ updatedUser });
                     replacements.status = "CRON COMPLETED";
+                    this.emailService.sendCronMail(replacements);
                 })
                 .catch((err) => {
                     replacements.status = "CRON FAILED WITH ERR";
                     replacements.error = err.toString();
+                    res.status(HttpResponse.ServerError.status).json({
+                        message: "SYNC FUCKED",
+                    });
+                    this.emailService.sendCronMail(replacements);
                 });
-            const template = Util.compileEmailTemplate(filePath, replacements);
-            const emailData: IEmailData = {
-                from: `admin <admin@investway.alienjack.net>`,
-                to: "sauravsehgal44@gmail.com",
-                subject: `Cron Status`,
-                html: template, // take from templates,
-                attachments: [],
-            };
-            await this.emailService.sendCronMail(emailData);
         });
     };
 
