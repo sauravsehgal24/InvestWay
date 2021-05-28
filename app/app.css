@@ -1,14 +1,15 @@
 .App {
-  text-align: center;
+    text-align: center;
+    height: 100%;
 }
 
 .App-logo {
-  height: 20vmin;
+    height: 20vmin;
 }
 
 .laptopImg {
-  position: relative;
-  height: 47%;
-  top: 14%;
-  left: 0%;
+    position: relative;
+    height: 47%;
+    top: 14%;
+    left: 0%;
 }

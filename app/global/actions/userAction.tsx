@@ -104,10 +104,17 @@ export const _logout = () => {
     };
 };
 
+export const toggleDebugMode = (debugMode) => {
+    return {
+        type: "DEBUGMODE",
+        payload: debugMode,
+    };
+};
+
 const _saveUserToState = (payload) => {
     return {
         type: "AUTH",
-        payload: payload,
+        payload: { ...payload, debugMode: false },
     };
 };
 
