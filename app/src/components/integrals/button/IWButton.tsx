@@ -31,6 +31,14 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "2%",
         backgroundColor: "#00a152",
     },
+    updateSettings: {
+        fontSize: "17px",
+        color: "white",
+        height: "40px",
+        width: "70%",
+        marginTop: "6%",
+        backgroundColor: "#00a152",
+    },
     userLogin: {
         fontSize: "17px",
         color: "white",
@@ -61,6 +69,27 @@ const QsLoginButton = (props) => {
     );
 };
 
+const UpdateUserSettings = (props) => {
+    const classes = useStyles();
+    return (
+        <React.Fragment>
+            <Button
+                onClick={() => {
+                    props.onClickEvent();
+                }}
+                style={props.styles ? props.styles : {}}
+                className={classes.updateSettings}
+                variant="contained"
+                size="small"
+            >
+                <Typography variant="button">
+                    {props.label ? props.label : "Update"}
+                </Typography>
+            </Button>
+        </React.Fragment>
+    );
+};
+
 const UserLoginButton = (props) => {
     return (
         <React.Fragment>
@@ -83,15 +112,11 @@ const UserLoginButton = (props) => {
     );
 };
 
-const UpdateSettingsButton = () => {
-    return <React.Fragment></React.Fragment>;
-};
-
 const _button = (props) => {
     return {
         qsLogin: <QsLoginButton {...props} />,
         userLogin: <UserLoginButton {...props} />,
-        updateSettings: {},
+        updateSettings: <UpdateUserSettings {...props} />,
     }[props.type];
 };
 

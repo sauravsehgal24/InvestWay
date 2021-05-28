@@ -2,7 +2,7 @@ import Login from "./src/components/login/login";
 import PageNotFound from "./src/components/pageNotFound";
 import QsProcessRedirect from "./src/components/redirect/qsRes";
 import Dashboard from "./src/components/userPortal/dashboard";
-import UserLandingPage from "./src/components/userPortal/UserLandingPage";
+import SettingsPage from "./src/components/userPortal/settings";
 const routes = [
     {
         path: "/user/dashboard",
@@ -24,7 +24,7 @@ const routes = [
     },
     {
         path: "/user/profileSettings",
-        component: Dashboard,
+        component: SettingsPage,
         protected: true,
         exact: true,
         props: {

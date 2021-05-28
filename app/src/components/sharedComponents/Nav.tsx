@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         // #0072ff
         backgroundColor: "#f9f9f9",
-        boxShadow: "5px 0px 20px #888888",
+        boxShadow: "0px 0px 0px #888888",
         flexShrink: 0,
     },
     drawer: {
@@ -95,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
     },
     listItemOnClickClass: {
         backgroundColor: "#75eb95",
+        border: "0.2px solid rgba(0,0,0,0.3)",
         height: "100px",
         width: "100%",
     },

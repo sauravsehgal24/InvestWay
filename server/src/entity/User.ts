@@ -157,6 +157,9 @@ class AccountSettings {
     athTkn: string;
 
     @Column({ type: "varchar", length: 150, nullable: true })
+    cronTkn: string;
+
+    @Column({ type: "varchar", length: 150, nullable: true })
     address: string;
 
     @Column({ type: "varchar", length: 150, nullable: true })
