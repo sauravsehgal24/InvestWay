@@ -96,6 +96,7 @@
         "@types/react": "^17.0.4",
         "@types/react-dom": "^17.0.3",
         "@types/react-redux": "^7.1.16",
+        "file-loader": "^6.2.0",
         "husky": "^4.3.8",
         "lint-staged": "^11.0.0",
         "prettier": "2.2.1",

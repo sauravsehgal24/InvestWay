@@ -15,7 +15,10 @@ import Nav from "./src/components/sharedComponents/Nav";
 import { AbstractProps } from "..";
 import { useSelector } from "react-redux";
 import store from "./global/store/store";
-import { tryAutoAuthentication } from "./global/actions/userAction";
+import {
+    tryAutoAuthentication,
+    setCurrentBrowserPath,
+} from "./global/actions/userAction";
 
 type IAppProps = AbstractProps & {
     context: string;
@@ -56,6 +59,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
     }, []);
     const handleSearchPath = () => {
         const path = localStorage.getItem("path");
+        store.dispatch(setCurrentBrowserPath(""));
         if (path && path.trim() !== "") {
             localStorage.removeItem("path");
         }

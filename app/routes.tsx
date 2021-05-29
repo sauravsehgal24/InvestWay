@@ -3,6 +3,7 @@ import PageNotFound from "./src/components/pageNotFound";
 import QsProcessRedirect from "./src/components/redirect/qsRes";
 import Dashboard from "./src/components/userPortal/dashboard";
 import SettingsPage from "./src/components/userPortal/settings";
+import TabData from "./src/components/userPortal/tabDataPage";
 const routes = [
     {
         path: "/user/dashboard",
@@ -32,30 +33,12 @@ const routes = [
         },
     },
     {
-        path: "/user/positions",
-        component: Dashboard,
+        path: "/user/tdata/:path",
+        component: TabData,
         protected: true,
         exact: true,
         props: {
             test: "POSITIONS",
-        },
-    },
-    {
-        path: "/user/executions",
-        component: Dashboard,
-        protected: true,
-        exact: true,
-        props: {
-            test: "EXECUTIONS",
-        },
-    },
-    {
-        path: "/user/orders",
-        component: Dashboard,
-        protected: true,
-        exact: true,
-        props: {
-            test: "ORDERS",
         },
     },
     {

@@ -24,6 +24,9 @@ import { Typography, Avatar } from "@material-ui/core";
 import AvTimerIcon from "@material-ui/icons/AvTimer";
 import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
+import { useDispatch } from "react-redux";
+import * as actions from "../../../global/actions/userAction";
+const soundClip = require("../../../assets/audio/navClip.mp3").default;
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -135,7 +138,7 @@ const navItems = [
     },
     {
         name: "Positions",
-        path: "/user/positions",
+        path: "/user/tdata/positions",
         icon: (iconProps) => (
             <ListItemIcon>
                 <BusinessCenterIcon style={{ color: iconProps.color }} />
@@ -146,7 +149,7 @@ const navItems = [
     },
     {
         name: "Executions",
-        path: "/user/executions",
+        path: "/user/tdata/executions",
         icon: (iconProps) => (
             <ListItemIcon>
                 <DynamicFeedIcon style={{ color: iconProps.color }} />
@@ -157,7 +160,7 @@ const navItems = [
     },
     {
         name: "Orders",
-        path: "/user/orders",
+        path: "/user/tdata/orders",
         icon: (iconProps) => (
             <ListItemIcon>
                 <AvTimerIcon style={{ color: iconProps.color }} />
@@ -195,6 +198,8 @@ type INavProps = AbstractProps & {
 const drawerWidth = 280;
 
 const Nav: React.FC<INavProps> = (props: INavProps) => {
+    const audio = new Audio(soundClip);
+    const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -203,10 +208,9 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
         {
             dashboard: "Dashboard",
             profileSettings: "Settings",
-            positions: "Positions",
-            executions: "Executions",
-            orders: "Orders",
-            "reports/deep": "Reports",
+            "tdata/positions": "Positions",
+            "tdata/executions": "Executions",
+            "tdata/orders": "Orders",
         }[props.path || "dashboard"]
     );
     const handleDrawerToggle = () => {
@@ -223,6 +227,9 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         style={{ textDecoration: "none" }}
                         onClick={() => {
                             setCurrentHeading(navItem.name);
+                            dispatch(
+                                actions.setCurrentBrowserPath(navItem.path)
+                            );
                             if (navItem.name === "Logout") {
                                 const path = localStorage.getItem("path");
                                 if (path && path.trim() === "") {
@@ -246,12 +253,15 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                             button
                             key={navItem.name}
                             onMouseEnter={() => {
+                                audio.play();
+
                                 const newObj = {};
                                 setNavItemTextColor({
                                     [navItem.name]: "black",
                                 });
                             }}
                             onMouseLeave={() => {
+                                audio.pause();
                                 setNavItemTextColor({
                                     [navItem.name]: "black",
                                 });

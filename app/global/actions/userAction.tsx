@@ -111,6 +111,13 @@ export const toggleDebugMode = (debugMode) => {
     };
 };
 
+export const setCurrentBrowserPath = (pathString) => {
+    return {
+        type: "PATH",
+        payload: pathString,
+    };
+};
+
 const _saveUserToState = (payload) => {
     return {
         type: "AUTH",

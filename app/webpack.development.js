@@ -29,6 +29,11 @@ module.exports = {
                 test: /\.(png|svg|jpg|jpeg|gif)$/,
                 use: ["url-loader"],
             },
+            {
+                include: [`${path.resolve(__dirname, "./assets/audio")}`],
+                test: /\.(mp3|wav)$/,
+                use: ["file-loader"],
+            },
         ],
     },
     devServer: {
