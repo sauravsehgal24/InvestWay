@@ -48,8 +48,14 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                 props.data.length !== 0 &&
                                 Object.keys(props.data[0]).map((key) => {
                                     return (
-                                        <TableCell style={{ fontSize: "18px" }}>
-                                            {key}
+                                        <TableCell style={{ fontSize: "20px" }}>
+                                            {key[0]
+                                                .toString()
+                                                .toUpperCase()
+                                                .toString()
+                                                .concat(
+                                                    key.substring(1, key.length)
+                                                )}
                                         </TableCell>
                                     );
                                 })}
@@ -63,7 +69,9 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                     <TableRow>
                                         {Object.keys(d).map((key) => {
                                             return (
-                                                <TableCell>
+                                                <TableCell
+                                                    style={{ fontSize: "18px" }}
+                                                >
                                                     {colVal(d[key])}
                                                 </TableCell>
                                             );

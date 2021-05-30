@@ -199,6 +199,7 @@ const drawerWidth = 280;
 
 const Nav: React.FC<INavProps> = (props: INavProps) => {
     const audio = new Audio(soundClip);
+    audio.volume = 0.1;
     const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();

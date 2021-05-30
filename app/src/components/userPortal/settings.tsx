@@ -121,12 +121,13 @@ const SettingsPage: React.FC<ISettingsPageProps> = (
     const classes = useStyles();
 
     const [personalSettings, setPersonalSettings] = React.useState({
-        name: "",
-        email: "",
-        address: "",
-        phone: "",
-        isActivated: false,
+        Name: "",
+        Email: "",
+        Address: "",
+        Phone: "",
+        ProfileStatus: false,
         debugMode: false,
+        Password: "",
     });
     const [qsAccountData, setQsAcntData] = React.useState();
 
@@ -138,15 +139,26 @@ const SettingsPage: React.FC<ISettingsPageProps> = (
         if (user) {
             setQsAcntData(user.qsProfileData.accounts[0]);
             setPersonalSettings({
-                name: user.name,
-                address: user.accountSettings.address,
-                email: user.accountSettings.email,
-                phone: user.accountSettings.phone,
-                isActivated: user.isActivated,
+                Name: user.name,
+                Address: user.accountSettings.address,
+                Email: user.accountSettings.email,
+                Phone: user.accountSettings.phone,
+                ProfileStatus: user.isActivated,
                 debugMode: user.debugMode,
+                Password: "",
             });
         }
     }, []);
+
+    const personalSettingsData = [
+        "Name",
+        "Email",
+        "Password",
+        "Phone",
+        "Address",
+        "ProfileStatus",
+        "Update",
+    ];
 
     return (
         <React.Fragment>
@@ -195,167 +207,81 @@ const SettingsPage: React.FC<ISettingsPageProps> = (
                                     <EditIcon />
                                 </IconButton>
                             </Grid>
-                            <Grid
-                                item
-                                md={12}
-                                sm={12}
-                                xs={12}
-                                lg={4}
-                                xl={4}
-                                className={classes.card1Div2}
-                            >
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel
-                                        error={false}
-                                        htmlFor="name"
-                                        style={{ fontSize: "20px" }}
-                                    >
-                                        <Typography variant="h3">
-                                            Name
-                                        </Typography>
-                                    </InputLabel>
-                                    <Input
-                                        id="name"
-                                        aria-describedby="name"
-                                        className={classes.textField}
-                                        value={personalSettings.name}
-                                        onChange={(e) => {
-                                            handlePersonalSettingsChange(
-                                                e,
-                                                "name"
-                                            );
-                                        }}
-                                    />
-                                    <FormHelperText id="error"></FormHelperText>
-                                </FormControl>
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel
-                                        error={false}
-                                        htmlFor="email"
-                                        style={{ fontSize: "20px" }}
-                                    >
-                                        <Typography variant="h3">
-                                            Email
-                                        </Typography>
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        aria-describedby="email"
-                                        className={classes.textField}
-                                        value={personalSettings.email}
-                                        onChange={(e) => {
-                                            handlePersonalSettingsChange(
-                                                e,
-                                                "email"
-                                            );
-                                        }}
-                                    />
-                                    <FormHelperText id="error"></FormHelperText>
-                                </FormControl>
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel
-                                        error={false}
-                                        htmlFor="password"
-                                        style={{ fontSize: "20px" }}
-                                    >
-                                        <Typography variant="h3">
-                                            Password
-                                        </Typography>
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        aria-describedby="password"
-                                        value="Password"
-                                        className={classes.textField}
-                                    />
-                                    <FormHelperText id="error"></FormHelperText>
-                                </FormControl>
-                            </Grid>
-                            <Grid
-                                item
-                                md={12}
-                                sm={12}
-                                xs={12}
-                                lg={4}
-                                xl={4}
-                                className={classes.card1Div3}
-                            >
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel
-                                        error={false}
-                                        htmlFor="phone"
-                                        style={{ fontSize: "20px" }}
-                                    >
-                                        <Typography variant="h3">
-                                            Phone
-                                        </Typography>
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        aria-describedby="phone"
-                                        value={personalSettings.phone}
-                                        onChange={(e) => {
-                                            handlePersonalSettingsChange(
-                                                e,
-                                                "phone"
-                                            );
-                                        }}
-                                        className={classes.textField}
-                                    />
-                                    <FormHelperText id="error"></FormHelperText>
-                                </FormControl>
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel
-                                        error={false}
-                                        htmlFor="Address"
-                                        style={{ fontSize: "20px" }}
-                                    >
-                                        <Typography variant="h3">
-                                            Address
-                                        </Typography>
-                                    </InputLabel>
-                                    <Input
-                                        id="address"
-                                        aria-describedby="address"
-                                        value={personalSettings.address}
-                                        onChange={(e) => {
-                                            handlePersonalSettingsChange(
-                                                e,
-                                                "address"
-                                            );
-                                        }}
-                                        className={classes.textField}
-                                    />
-                                    <FormHelperText id="error"></FormHelperText>
-                                </FormControl>
 
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel
-                                        error={false}
-                                        htmlFor="Is Activated"
-                                        style={{ fontSize: "20px" }}
+                            {[0, 3].map((count) => {
+                                return (
+                                    <Grid
+                                        item
+                                        md={12}
+                                        sm={12}
+                                        xs={12}
+                                        lg={4}
+                                        xl={4}
+                                        className={classes.card1Div2}
                                     >
-                                        <Typography variant="h3">
-                                            Profile Status
-                                        </Typography>
-                                    </InputLabel>
-                                    <Input
-                                        id="Is Activated"
-                                        aria-describedby="Is Activated"
-                                        value={
-                                            personalSettings.isActivated
-                                                ? "Activated"
-                                                : "Not Activated"
-                                        }
-                                        className={classes.textField}
-                                    />
-                                    <FormHelperText id="error"></FormHelperText>
-                                </FormControl>
-                                <IWButton
-                                    type="updateSettings"
-                                    onClickEvent={() => {}}
-                                />
-                            </Grid>
+                                        {personalSettingsData
+                                            .slice(
+                                                count,
+                                                count === 0
+                                                    ? count + 3
+                                                    : personalSettingsData.length
+                                            )
+                                            .map((pData) => {
+                                                return pData === "Update" ? (
+                                                    <IWButton
+                                                        type="updateSettings"
+                                                        onClickEvent={() => {}}
+                                                    />
+                                                ) : (
+                                                    <FormControl
+                                                        className={
+                                                            classes.formControl
+                                                        }
+                                                    >
+                                                        <InputLabel
+                                                            error={false}
+                                                            htmlFor={pData.toString()}
+                                                            style={{
+                                                                fontSize:
+                                                                    "20px",
+                                                            }}
+                                                        >
+                                                            <Typography variant="h3">
+                                                                {pData}
+                                                            </Typography>
+                                                        </InputLabel>
+                                                        <Input
+                                                            id={pData.toString()}
+                                                            aria-describedby={pData.toString()}
+                                                            className={
+                                                                classes.textField
+                                                            }
+                                                            value={
+                                                                personalSettings[
+                                                                    pData.toString()
+                                                                ]
+                                                            }
+                                                            onChange={
+                                                                pData ===
+                                                                    "Password" ||
+                                                                pData ===
+                                                                    "ProfileStatus"
+                                                                    ? () => {}
+                                                                    : (e) => {
+                                                                          handlePersonalSettingsChange(
+                                                                              e,
+                                                                              pData.toString()
+                                                                          );
+                                                                      }
+                                                            }
+                                                        />
+                                                        <FormHelperText id="error"></FormHelperText>
+                                                    </FormControl>
+                                                );
+                                            })}
+                                    </Grid>
+                                );
+                            })}
                         </Grid>
                     </Card>
                 </Grid>
