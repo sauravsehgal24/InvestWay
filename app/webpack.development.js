@@ -37,11 +37,16 @@ module.exports = {
         ],
     },
     devServer: {
+        watchOptions: {
+            ignored: /node_modules/,
+        },
         historyApiFallback: true,
+        inline: true,
         compress: true,
         watchContentBase: true,
         liveReload: true,
         port: 3001,
+        hot: true,
     },
     plugins: [
         new HtmlWebpackPlugin({

@@ -23,6 +23,9 @@ const userReducer = (
         case "DEBUGMODE": {
             return { ...state, debugMode: payload };
         }
+        case "MODAL": {
+            return { ...state, modalOpen: payload };
+        }
         case "PATH": {
             return { ...state, path: payload };
         }

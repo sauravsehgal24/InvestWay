@@ -103,11 +103,17 @@ export const _logout = () => {
         payload: {},
     };
 };
-
 export const toggleDebugMode = (debugMode) => {
     return {
         type: "DEBUGMODE",
         payload: debugMode,
+    };
+};
+
+export const toggleModal = (modalOpen, modalType?) => {
+    return {
+        type: "MODAL",
+        payload: { val: modalOpen, type: modalType },
     };
 };
 

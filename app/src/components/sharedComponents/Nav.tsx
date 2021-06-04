@@ -27,7 +27,7 @@ import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 import { useDispatch } from "react-redux";
 import * as actions from "../../../global/actions/userAction";
 const soundClip = require("../../../assets/audio/navClip.mp3").default;
-
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 const useStyles = makeStyles((theme) => ({
     appBar: {
         [theme.breakpoints.up("sm")]: {
@@ -138,7 +138,7 @@ const navItems = [
     },
     {
         name: "Positions",
-        path: "/user/tdata/positions",
+        path: "/user/questrade/positions",
         icon: (iconProps) => (
             <ListItemIcon>
                 <BusinessCenterIcon style={{ color: iconProps.color }} />
@@ -149,7 +149,7 @@ const navItems = [
     },
     {
         name: "Executions",
-        path: "/user/tdata/executions",
+        path: "/user/questrade/executions",
         icon: (iconProps) => (
             <ListItemIcon>
                 <DynamicFeedIcon style={{ color: iconProps.color }} />
@@ -160,10 +160,21 @@ const navItems = [
     },
     {
         name: "Orders",
-        path: "/user/tdata/orders",
+        path: "/user/questrade/orders",
         icon: (iconProps) => (
             <ListItemIcon>
                 <AvTimerIcon style={{ color: iconProps.color }} />
+            </ListItemIcon>
+        ),
+        iconColor: "#7b85e3",
+        color: "black",
+    },
+    {
+        name: "QS Accounts",
+        path: "/user/questrade/accounts",
+        icon: (iconProps) => (
+            <ListItemIcon>
+                <AccountBalanceIcon style={{ color: iconProps.color }} />
             </ListItemIcon>
         ),
         iconColor: "#7b85e3",
@@ -212,6 +223,7 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
             "tdata/positions": "Positions",
             "tdata/executions": "Executions",
             "tdata/orders": "Orders",
+            "questrade/accounts": "QS Accounts",
         }[props.path || "dashboard"]
     );
     const handleDrawerToggle = () => {

@@ -23,11 +23,11 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import Avatar from "@material-ui/core/Avatar";
 import IWButton from "../integrals/button/IWButton";
-const avatar = require("../../../assets/images/avatar.jpg").default;
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import * as actions from "../../../global/actions/userAction";
 import Switch from "@material-ui/core/Switch";
+import PersonalSettings from "./settings/profileSettings";
 
 type ISettingsPageProps = AbstractProps & { test: string };
 const useStyles = makeStyles((theme) => ({
@@ -46,8 +46,9 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down("md")]: {
             width: "100%",
         },
-        border: "0.2px solid rgba(0,0,0,0.2)",
-        boxShadow: "8px 13px 19px -12px rgba(0,0,0,0.63)",
+        border: "none",
+        boxShadow: "none",
+        backgroundColor: "rgba(240, 240, 240,0.8)",
         display: "flex",
         flexDirection: "row",
     },
@@ -55,11 +56,8 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down("md")]: {
             width: "100%",
         },
-        borderTop: "0.2px solid rgba(0,0,0,0.2)",
-        borderLeft: "0.2px solid rgba(0,0,0,0.2)",
-        borderRight: "0.2px solid rgba(0,0,0,0.2)",
-        boxShadow: "8px 13px 19px -12px rgba(0,0,0,0.63)",
-        backgroundColor: "#e8e8e8",
+        boxShadow: "none",
+        backgroundColor: "rgba(240, 240, 240,0.8)",
         marginLeft: "0px",
         textAlign: "center",
     },
@@ -119,264 +117,16 @@ const SettingsPage: React.FC<ISettingsPageProps> = (
     const dispatch = useDispatch();
     const user = useSelector<any>((state) => state.userInfo) as any;
     const classes = useStyles();
-
-    const [personalSettings, setPersonalSettings] = React.useState({
-        Name: "",
-        Email: "",
-        Address: "",
-        Phone: "",
-        ProfileStatus: false,
-        debugMode: false,
-        Password: "",
-    });
     const [qsAccountData, setQsAcntData] = React.useState();
-
-    const handlePersonalSettingsChange = (e, type) => {
-        setPersonalSettings({ ...personalSettings, [type]: e.target.value });
-    };
-
-    React.useEffect(() => {
-        if (user) {
-            setQsAcntData(user.qsProfileData.accounts[0]);
-            setPersonalSettings({
-                Name: user.name,
-                Address: user.accountSettings.address,
-                Email: user.accountSettings.email,
-                Phone: user.accountSettings.phone,
-                ProfileStatus: user.isActivated,
-                debugMode: user.debugMode,
-                Password: "",
-            });
-        }
-    }, []);
-
-    const personalSettingsData = [
-        "Name",
-        "Email",
-        "Password",
-        "Phone",
-        "Address",
-        "ProfileStatus",
-        "Update",
-    ];
 
     return (
         <React.Fragment>
             <Grid container className={classes.root}>
-                <Grid
-                    item
-                    className={classes.gridItems}
-                    md={12}
-                    sm={12}
-                    xs={12}
-                    lg={12}
-                    xl={12}
-                    style={{
-                        width: "100%",
-                        height: "400px",
-                    }}
-                >
-                    <div className={classes.cardHeadingDiv}>
-                        <Card className={classes.cardHeadingCard}>
-                            <Typography variant="h1">
-                                PROFILE SETTINGS
-                            </Typography>
-                        </Card>
-                    </div>
-                    <Card className={classes.cards}>
-                        <Grid container>
-                            <Grid
-                                item
-                                md={12}
-                                sm={12}
-                                xs={12}
-                                lg={4}
-                                xl={4}
-                                className={classes.card1Div1}
-                            >
-                                <Avatar
-                                    variant="square"
-                                    style={{
-                                        height: "300px",
-                                        width: "100%",
-                                        border: "0.2px solid rgba(0,0,0,0.6)",
-                                    }}
-                                    src={avatar}
-                                ></Avatar>
-                                <IconButton aria-label="delete">
-                                    <EditIcon />
-                                </IconButton>
-                            </Grid>
+                <PersonalSettings
+                    editable={user && user.role === "User" ? true : false}
+                    classes={classes}
+                />
 
-                            {[0, 3].map((count) => {
-                                return (
-                                    <Grid
-                                        item
-                                        md={12}
-                                        sm={12}
-                                        xs={12}
-                                        lg={4}
-                                        xl={4}
-                                        className={classes.card1Div2}
-                                    >
-                                        {personalSettingsData
-                                            .slice(
-                                                count,
-                                                count === 0
-                                                    ? count + 3
-                                                    : personalSettingsData.length
-                                            )
-                                            .map((pData) => {
-                                                return pData === "Update" ? (
-                                                    <IWButton
-                                                        type="updateSettings"
-                                                        onClickEvent={() => {}}
-                                                    />
-                                                ) : (
-                                                    <FormControl
-                                                        className={
-                                                            classes.formControl
-                                                        }
-                                                    >
-                                                        <InputLabel
-                                                            error={false}
-                                                            htmlFor={pData.toString()}
-                                                            style={{
-                                                                fontSize:
-                                                                    "20px",
-                                                            }}
-                                                        >
-                                                            <Typography variant="h3">
-                                                                {pData}
-                                                            </Typography>
-                                                        </InputLabel>
-                                                        <Input
-                                                            id={pData.toString()}
-                                                            aria-describedby={pData.toString()}
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            value={
-                                                                personalSettings[
-                                                                    pData.toString()
-                                                                ]
-                                                            }
-                                                            onChange={
-                                                                pData ===
-                                                                    "Password" ||
-                                                                pData ===
-                                                                    "ProfileStatus"
-                                                                    ? () => {}
-                                                                    : (e) => {
-                                                                          handlePersonalSettingsChange(
-                                                                              e,
-                                                                              pData.toString()
-                                                                          );
-                                                                      }
-                                                            }
-                                                        />
-                                                        <FormHelperText id="error"></FormHelperText>
-                                                    </FormControl>
-                                                );
-                                            })}
-                                    </Grid>
-                                );
-                            })}
-                        </Grid>
-                    </Card>
-                </Grid>
-
-                <Grid
-                    item
-                    className={classes.gridItems}
-                    md={12}
-                    sm={12}
-                    xs={12}
-                    lg={12}
-                    xl={12}
-                    style={{
-                        width: "100%",
-                        height: "400px",
-                        marginTop: "2%",
-                    }}
-                >
-                    <div className={classes.cardHeadingDiv}>
-                        <Card className={classes.cardHeadingCard}>
-                            <Typography variant="h1">
-                                QUESTRADE ACCOUNT(S)
-                            </Typography>
-                        </Card>
-                    </div>
-                    <Card className={classes.cards}>
-                        <Grid container>
-                            {[0, 3].map((count) => {
-                                return (
-                                    <Grid
-                                        item
-                                        md={12}
-                                        sm={12}
-                                        xs={12}
-                                        lg={6}
-                                        xl={6}
-                                        className={classes.card2Divs}
-                                    >
-                                        {qsAccountData &&
-                                            Object.keys(qsAccountData)
-                                                .slice(count, count + 3)
-                                                .map((key) => {
-                                                    return (
-                                                        <FormControl
-                                                            className={
-                                                                classes.formControl
-                                                            }
-                                                        >
-                                                            <InputLabel
-                                                                error={false}
-                                                                htmlFor={key}
-                                                                style={{
-                                                                    fontSize:
-                                                                        "20px",
-                                                                }}
-                                                            >
-                                                                <Typography variant="h3">
-                                                                    {key[0]
-                                                                        .toString()
-                                                                        .toUpperCase()
-                                                                        .concat(
-                                                                            key
-                                                                                .toString()
-                                                                                .substring(
-                                                                                    1,
-                                                                                    key.length
-                                                                                )
-                                                                        )}
-                                                                </Typography>
-                                                            </InputLabel>
-                                                            <Input
-                                                                id={key}
-                                                                aria-describedby={
-                                                                    key
-                                                                }
-                                                                className={
-                                                                    classes.textField
-                                                                }
-                                                                value={
-                                                                    user
-                                                                        .qsProfileData
-                                                                        .accounts[0][
-                                                                        key
-                                                                    ]
-                                                                }
-                                                            />
-                                                        </FormControl>
-                                                    );
-                                                })}
-                                    </Grid>
-                                );
-                            })}
-                        </Grid>
-                    </Card>
-                </Grid>
                 {/* <Grid
                     item
                     xs={12}
@@ -386,7 +136,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = (
                     }}
                 ></Grid> */}
                 {/* <PrettoSlider
-                valueLabelDisplay="auto"
+                valueLabelDisplay="auto" 
                 aria-label="pretto slider"
                 defaultValue={20}
             /> */}

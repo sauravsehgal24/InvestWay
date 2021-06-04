@@ -11,12 +11,16 @@ import {
     TableHead,
     TableRow,
     Paper,
+    Typography,
+    IconButton,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
-
+import * as actions from "../../../global/actions/userAction";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import { AbstractProps } from "../../../..";
-export type IWTablePath = "executions" | "orders" | "positions";
+import { useDispatch, useSelector } from "react-redux";
+export type IWTablePath = "executions" | "orders" | "positions" | "accounts";
 type IWTableProps = AbstractProps & {
     path: IWTablePath;
     data: any;
@@ -24,13 +28,15 @@ type IWTableProps = AbstractProps & {
 
 const useStyles = makeStyles({
     table: {
-        border: "0.2px solid rgba(0,0,0,0.2)",
-        boxShadow: "8px 13px 19px -12px rgba(0,0,0,0.63)",
+        border: "none",
+        boxShadow: "none",
+        backgroundColor: "rgba(240, 240, 240,0.4)",
     },
 });
 
 const IWTable: React.FC<IWTableProps> = (props) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const colVal = (val) => {
         if (val === true) {
             return <CheckIcon style={{ color: "green" }} />;
@@ -38,17 +44,30 @@ const IWTable: React.FC<IWTableProps> = (props) => {
             return <CloseIcon style={{ color: "red" }} />;
         } else return val;
     };
+    const setBalanceInfo = () => {
+        if (props.path === "accounts") {
+        }
+    };
+    const user = useSelector<{ userInfo }>((state) => state.userInfo);
     return (
         <React.Fragment>
             <TableContainer component={Paper} className={classes.table}>
                 <Table>
-                    <TableHead>
+                    <TableHead
+                        style={{
+                            backgroundColor: "rgba(156, 255, 200,0.3)",
+                        }}
+                    >
                         <TableRow>
                             {props.data &&
                                 props.data.length !== 0 &&
                                 Object.keys(props.data[0]).map((key) => {
                                     return (
-                                        <TableCell style={{ fontSize: "20px" }}>
+                                        <TableCell
+                                            style={{
+                                                fontSize: "20px",
+                                            }}
+                                        >
                                             {key[0]
                                                 .toString()
                                                 .toUpperCase()
@@ -59,6 +78,11 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                         </TableCell>
                                     );
                                 })}
+                            {props.path === "accounts" && (
+                                <TableCell style={{ fontSize: "20px" }}>
+                                    Balance Info
+                                </TableCell>
+                            )}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -70,12 +94,30 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                         {Object.keys(d).map((key) => {
                                             return (
                                                 <TableCell
-                                                    style={{ fontSize: "18px" }}
+                                                    style={{
+                                                        fontSize: "18px",
+                                                    }}
                                                 >
                                                     {colVal(d[key])}
                                                 </TableCell>
                                             );
                                         })}
+                                        {props.path === "accounts" && (
+                                            <TableCell
+                                                onClick={(e) => {
+                                                    dispatch(
+                                                        actions.toggleModal(
+                                                            true,
+                                                            "balanceModal"
+                                                        )
+                                                    );
+                                                }}
+                                            >
+                                                <IconButton>
+                                                    <VisibilityIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                        )}
                                     </TableRow>
                                 );
                             })}

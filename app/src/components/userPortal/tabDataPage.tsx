@@ -9,7 +9,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { AbstractProps } from "../../../..";
 import { useSelector } from "react-redux";
-import IWTable, { IWTablePath } from "../sharedComponents/table";
+import IWTable, { IWTablePath } from "../sharedComponents/IWTable";
 
 type TabDataProps = AbstractProps & {
     test: string;
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
         marginTop: "1%",
         width: "100%",
         border: "0.2px solid rgba(0,0,0,0.2)",
-        boxShadow: "8px 13px 19px -12px rgba(0,0,0,0.63)",
+        boxShadow: "none",
         backgroundColor: "#e8e8e8",
         marginLeft: "0px",
     },
@@ -42,7 +42,9 @@ const TabData: React.FC<TabDataProps> = (props) => {
     const dataPath = props.match.params.path;
     const [data, setTabData] = React.useState();
     React.useEffect(() => {
-        if (user) setTabData(user.qsProfileData[dataPath]);
+        if (user) {
+            setTabData(user.qsProfileData[dataPath]);
+        }
     }, [dataPath]);
     const classes = useStyles();
     return (

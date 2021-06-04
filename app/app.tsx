@@ -18,7 +18,9 @@ import store from "./global/store/store";
 import {
     tryAutoAuthentication,
     setCurrentBrowserPath,
+    toggleModal,
 } from "./global/actions/userAction";
+import IWModal from "./src/components/sharedComponents/IWModal";
 
 type IAppProps = AbstractProps & {
     context: string;
@@ -66,6 +68,14 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
     };
     const classes = useStyles();
     const user = useSelector<{ userInfo }>((state) => state.userInfo);
+    const handleIWModal = () => {
+        store.dispatch(
+            toggleModal(
+                !(user as any).modalOpen.val,
+                (user as any).modalOpen.type
+            )
+        );
+    };
     return (
         <React.Fragment>
             {!user ? (
@@ -108,6 +118,14 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                                 })}
                             </Switch>
                         </main>
+                        {user && (user as any).modalOpen && (
+                            <IWModal
+                                modalOpen={(user as any).modalOpen.val || false}
+                                handleOnClose={handleIWModal}
+                                modalType={(user as any).modalOpen.type || ""}
+                                user={user}
+                            />
+                        )}
                     </div>
                 </Route>
                 <Route
