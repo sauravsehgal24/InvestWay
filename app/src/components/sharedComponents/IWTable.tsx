@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     table: {
         border: "none",
         boxShadow: "none",
-        backgroundColor: "rgba(240, 240, 240,0.4)",
+        backgroundColor: "rgba(224, 224, 224,0.5)",
     },
 });
 
@@ -55,10 +55,11 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                 <Table>
                     <TableHead
                         style={{
-                            backgroundColor: "rgba(156, 255, 200,0.3)",
+                            backgroundColor: "rgba(212, 212, 212,0.6)",
+                            boxShadow: "none",
                         }}
                     >
-                        <TableRow>
+                        <TableRow style={{}}>
                             {props.data &&
                                 props.data.length !== 0 &&
                                 Object.keys(props.data[0]).map((key) => {
@@ -66,6 +67,7 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                         <TableCell
                                             style={{
                                                 fontSize: "20px",
+                                                textAlign: "center",
                                             }}
                                         >
                                             {key[0]
@@ -79,7 +81,12 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                     );
                                 })}
                             {props.path === "accounts" && (
-                                <TableCell style={{ fontSize: "20px" }}>
+                                <TableCell
+                                    style={{
+                                        fontSize: "20px",
+                                        textAlign: "center",
+                                    }}
+                                >
                                     Balance Info
                                 </TableCell>
                             )}
@@ -96,6 +103,7 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                                 <TableCell
                                                     style={{
                                                         fontSize: "18px",
+                                                        textAlign: "center",
                                                     }}
                                                 >
                                                     {colVal(d[key])}
@@ -104,6 +112,7 @@ const IWTable: React.FC<IWTableProps> = (props) => {
                                         })}
                                         {props.path === "accounts" && (
                                             <TableCell
+                                                style={{ textAlign: "center" }}
                                                 onClick={(e) => {
                                                     dispatch(
                                                         actions.toggleModal(

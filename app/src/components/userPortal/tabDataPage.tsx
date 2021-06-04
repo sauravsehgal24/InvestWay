@@ -25,9 +25,9 @@ const useStyles = makeStyles({
     cardFilters: {
         marginTop: "1%",
         width: "100%",
-        border: "0.2px solid rgba(0,0,0,0.2)",
-        boxShadow: "none",
-        backgroundColor: "#e8e8e8",
+        border: "none",
+        boxShadow: "15px 17px 0px -7px rgba(0,0,0,0.6)",
+        backgroundColor: "rgba(23,227,123,0.92)",
         marginLeft: "0px",
     },
     tableGrid: {

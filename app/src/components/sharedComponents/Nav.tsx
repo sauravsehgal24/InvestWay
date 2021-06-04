@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
         },
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "rgba(242, 242, 242,1)",
         boxShadow: "none",
         color: "Black",
     },
