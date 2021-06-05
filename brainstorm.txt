@@ -1,3 +1,10 @@
+reports under dashboard
+1. openpnl line chart
+2. stock type piechart
+3. genre type piechart (sort by descending order and display lets say top 5 and other under rest arc)
+4. diversification ratio: based on sliders val and max equity and genre vals set by users
+5. Add tooltips for reports as well
+
 Brainstorm schemas for mongo:
 
 User

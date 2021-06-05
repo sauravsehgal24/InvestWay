@@ -27,7 +27,7 @@ const useStyles = makeStyles({
         width: "100%",
         border: "none",
         boxShadow: "15px 17px 0px -7px rgba(0,0,0,0.6)",
-        backgroundColor: "rgba(23,227,123,0.92)",
+        backgroundColor: "rgba(23,227,123,0.6)",
         marginLeft: "0px",
     },
     tableGrid: {

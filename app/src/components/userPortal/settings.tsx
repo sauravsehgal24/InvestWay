@@ -28,6 +28,7 @@ import { useDispatch } from "react-redux";
 import * as actions from "../../../global/actions/userAction";
 import Switch from "@material-ui/core/Switch";
 import PersonalSettings from "./settings/profileSettings";
+import QsSettings from "./settings/qsSettings";
 
 type ISettingsPageProps = AbstractProps & { test: string };
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         },
         border: "none",
         boxShadow: "28px 33px 0px -7px rgba(0,0,0,0.6)",
-        backgroundColor: "rgba(23,227,123,0.92)",
+        // backgroundColor: "rgba(23,227,123,0.6)",
         // backgroundColor: "rgba(240, 240, 240,0.8)",
         display: "flex",
         flexDirection: "row",
@@ -58,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
             width: "100%",
         },
         boxShadow: "none",
-        backgroundColor: "rgba(23,227,123,0.92)",
+        //backgroundColor: "rgba(23,227,123,0.6)",
         marginLeft: "0px",
         textAlign: "center",
     },
@@ -123,10 +124,24 @@ const SettingsPage: React.FC<ISettingsPageProps> = (
     return (
         <React.Fragment>
             <Grid container className={classes.root}>
-                <PersonalSettings
-                    editable={user && user.role === "User" ? true : false}
-                    classes={classes}
-                />
+                {user && (
+                    <React.Fragment>
+                        <PersonalSettings
+                            editable={
+                                user && user.role === "User" ? true : false
+                            }
+                            classes={classes}
+                            user={user}
+                        />
+                        <QsSettings
+                            editable={
+                                user && user.role === "User" ? true : false
+                            }
+                            classes={classes}
+                            user={user}
+                        />
+                    </React.Fragment>
+                )}
 
                 {/* <Grid
                     item

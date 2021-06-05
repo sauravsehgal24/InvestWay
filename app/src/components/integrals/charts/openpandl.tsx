@@ -6,22 +6,33 @@ import { Chart } from "chart.js";
 type OpenPnLChartProps = AbstractProps & {
     balances: Array<any>;
 };
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     card: {
-        width: "50%",
+        width: "90%",
+        height: "100%",
+        [theme.breakpoints.down("md")]: {
+            width: "100%",
+        },
         boxShadow: "21px 19px 0px -5px rgba(80,83,84,0.92)",
     },
-});
+}));
 const OpenPnLChart: React.FC<OpenPnLChartProps> = (props) => {
     const classes = useStyles();
     const buildBalancesChart = () => {
         const balances = props.balances;
         let labels = [];
         let openpnl = [];
+        let cash = [];
+        let mktVal = [];
         balances.map((balance) => {
             balance.recordHistory.map((history) => {
                 labels = [...labels, history];
                 openpnl = [...openpnl, balance.openPAndL];
+                cash = [...cash, balance.detail.perCurrencyBalances[0].cash];
+                mktVal = [
+                    ...mktVal,
+                    balance.detail.perCurrencyBalances[0].marketValue,
+                ];
             });
         });
         console.log(labels);
@@ -35,8 +46,20 @@ const OpenPnLChart: React.FC<OpenPnLChartProps> = (props) => {
                     {
                         label: "Open Profit and Loss",
                         data: openpnl,
+                        borderColor: ["#03fcca"],
+                        borderWidth: 1,
+                    },
+                    {
+                        label: "Cash",
+                        data: cash,
+                        borderColor: ["#0ffc03"],
+                        borderWidth: 1,
+                    },
+                    {
+                        label: "Holding's Market Value",
+                        data: mktVal,
                         backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-                        borderColor: ["rgba(255, 99, 132, 1)"],
+                        borderColor: ["#fc0324"],
                         borderWidth: 1,
                     },
                 ],

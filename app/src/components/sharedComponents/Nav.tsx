@@ -122,6 +122,14 @@ const useStyles = makeStyles((theme) => ({
         width: "50px",
         marginRight: "7%",
     },
+    headerText: {
+        fontSize: "50px",
+        fontWeight: 1000,
+        color: "rgba(0, 0, 0,0.5)",
+        [theme.breakpoints.down("md")]: {
+            fontSize: "30px",
+        },
+    },
 }));
 
 const navItems = [
@@ -220,9 +228,9 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
         {
             dashboard: "Dashboard",
             profileSettings: "Settings",
-            "tdata/positions": "Positions",
-            "tdata/executions": "Executions",
-            "tdata/orders": "Orders",
+            "questrade/positions": "Positions",
+            "questrade/executions": "Executions",
+            "questrade/orders": "Orders",
             "questrade/accounts": "QS Accounts",
         }[props.path || "dashboard"]
     );
@@ -318,7 +326,11 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         <MenuIcon className={classes.menuIcon} />
                     </IconButton>
 
-                    <Typography variant="h1">{currentHeading}</Typography>
+                    <Typography variant="h1">
+                        <span className={classes.headerText}>
+                            {currentHeading}
+                        </span>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">

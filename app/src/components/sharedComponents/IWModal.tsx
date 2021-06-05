@@ -26,7 +26,12 @@ import { PromiseProvider } from "mongoose";
 export type IWModalProps = AbstractProps & {
     modalOpen: boolean;
     handleOnClose;
-    modalType: "balanceModal" | "loginModal" | "updatePasswordModal";
+    modalType:
+        | "balanceModal"
+        | "loginModal"
+        | "updatePasswordModal"
+        | "dummyUserModal"
+        | "viewerDisclaimerModal";
     user: any;
 };
 
@@ -39,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         backgroundColor: "white ",
+        boxShadow: "28px 33px 0px -7px rgba(0,0,0,0.6)",
         width: "500px",
         display: "flex",
         flexDirection: "column",
@@ -92,6 +98,36 @@ const IWModal: React.FC<IWModalProps> = (props: IWModalProps) => {
                             </Typography>
                         );
                     })}
+            </React.Fragment>
+        );
+    };
+
+    const _dummyUserModal = () => {
+        return (
+            <React.Fragment>
+                <Typography variant="h1" style={{ marginBottom: "4%" }}>
+                    <strong>Disclaimer</strong>
+                </Typography>
+                <Typography variant="h5">
+                    This context is a dummy context and all the relevant data
+                    linked and displayed in respect to this user is the dummy
+                    data for demonstration purposes only
+                </Typography>
+            </React.Fragment>
+        );
+    };
+
+    const _viewerDisclaimerModal = () => {
+        return (
+            <React.Fragment>
+                <Typography variant="h1" style={{ marginBottom: "4%" }}>
+                    <strong>Disclaimer</strong>
+                </Typography>
+                <Typography variant="h5">
+                    You are logged in as a viewer for the user and you will not
+                    be able to make any changes to this user's data from
+                    InvestWay App
+                </Typography>
             </React.Fragment>
         );
     };
@@ -178,6 +214,8 @@ const IWModal: React.FC<IWModalProps> = (props: IWModalProps) => {
         balanceModal: _balanceModal,
         loginModal: _loginModal,
         updatePasswordModal: _updatePasswordModal,
+        dummyUserModal: _dummyUserModal,
+        viewerDisclaimerModal: _viewerDisclaimerModal,
     }[props.modalType];
     return (
         <React.Fragment>
@@ -198,9 +236,17 @@ const IWModal: React.FC<IWModalProps> = (props: IWModalProps) => {
                         className={classes.paper}
                         style={{
                             height:
-                                props.modalType === "updatePasswordModal"
+                                props.modalType === "updatePasswordModal" ||
+                                props.modalType === "dummyUserModal" ||
+                                props.modalType === "viewerDisclaimerModal"
                                     ? "300px"
                                     : "600px",
+                            padding:
+                                props.modalType === "updatePasswordModal" ||
+                                props.modalType === "dummyUserModal" ||
+                                props.modalType === "viewerDisclaimerModal"
+                                    ? "2%"
+                                    : "0px",
                         }}
                     >
                         {renderModal()}

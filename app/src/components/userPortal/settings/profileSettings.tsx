@@ -25,13 +25,16 @@ import IWButton from "../../integrals/button/IWButton";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../../global/actions/userAction";
 
-type IPersonalSettingsProps = AbstractProps & { editable: boolean; classes };
+type IPersonalSettingsProps = AbstractProps & {
+    editable: boolean;
+    classes;
+    user;
+};
 
 const PersonalSettings: React.FC<IPersonalSettingsProps> = (
     props: IPersonalSettingsProps
 ) => {
     const dispatch = useDispatch();
-    const user = useSelector<any>((state) => state.userInfo) as any;
     const handlePersonalSettingsChange = (e, type) => {
         setPersonalSettings({ ...personalSettings, [type]: e.target.value });
     };
@@ -54,14 +57,14 @@ const PersonalSettings: React.FC<IPersonalSettingsProps> = (
         "Update",
     ];
     React.useEffect(() => {
-        if (user) {
+        if (props.user) {
             setPersonalSettings({
-                Name: user.name,
-                Address: user.accountSettings.address,
-                Email: user.accountSettings.email,
-                Phone: user.accountSettings.phone,
-                ProfileStatus: user.isActivated,
-                debugMode: user.debugMode,
+                Name: props.user.name,
+                Address: props.user.accountSettings.address,
+                Email: props.user.accountSettings.email,
+                Phone: props.user.accountSettings.phone,
+                ProfileStatus: props.user.isActivated,
+                debugMode: props.user.debugMode,
                 Password: "",
             });
         }

@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
     },
     paper: {
+        boxShadow: "28px 33px 0px -7px rgba(0,0,0,0.6)",
         backgroundColor: "white ",
         height: "400px",
         width: "400px",
