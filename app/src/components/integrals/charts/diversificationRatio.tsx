@@ -47,12 +47,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const standings = {
-    good: "Good",
-    average: "Average",
-    bad: "Bad",
-};
-
 const DiversificationChart: React.FC<IDiversificationProps> = (props) => {
     const getStanding = () => {
         if (props.ratio < 40) {

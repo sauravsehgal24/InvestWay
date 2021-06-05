@@ -26,8 +26,26 @@ import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../../global/actions/userAction";
 
 type IQsSettingsProps = AbstractProps & { editable: boolean; classes; user };
+const useStyles = makeStyles((theme) => ({
+    card: {
+        width: "50%",
+        height: "100%",
+        [theme.breakpoints.down("md")]: {
+            width: "100%",
+            marginTop: "4%",
+        },
+        boxShadow: "21px 19px 0px -5px rgba(80,83,84,0.92)",
+    },
+    content: {
+        display: "flex",
+        height: "400px",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+}));
 
 const QsSettings: React.FC<IQsSettingsProps> = (props) => {
+    const classes = useStyles();
     return (
         <React.Fragment>
             <Grid
@@ -49,7 +67,21 @@ const QsSettings: React.FC<IQsSettingsProps> = (props) => {
                         <Typography variant="h1">QS SETTINGS</Typography>
                     </Card>
                 </div>
-                <Card className={props.classes.cards}></Card>
+                <Card className={classes.card}>
+                    <Grid container>
+                        <Grid
+                            item
+                            md={12}
+                            sm={12}
+                            xs={12}
+                            lg={12}
+                            xl={12}
+                            className={classes.content}
+                        >
+                            <Typography variant="h1">Comming Soon</Typography>
+                        </Grid>
+                    </Grid>
+                </Card>
             </Grid>
         </React.Fragment>
     );
