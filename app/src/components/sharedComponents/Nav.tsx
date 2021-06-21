@@ -24,14 +24,17 @@ import { Typography, Avatar } from "@material-ui/core";
 import AvTimerIcon from "@material-ui/icons/AvTimer";
 import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
-
+import { useDispatch } from "react-redux";
+import * as actions from "../../../global/actions/userAction";
+const soundClip = require("../../../assets/audio/navClip.mp3").default;
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 const useStyles = makeStyles((theme) => ({
     appBar: {
         [theme.breakpoints.up("sm")]: {
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
         },
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "rgba(242, 242, 242,1)",
         boxShadow: "none",
         color: "Black",
     },
@@ -50,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         // #0072ff
         backgroundColor: "#f9f9f9",
-        boxShadow: "5px 0px 20px #888888",
+        boxShadow: "0px 0px 0px #888888",
         flexShrink: 0,
     },
     drawer: {
@@ -88,11 +91,16 @@ const useStyles = makeStyles((theme) => ({
         height: "70px",
         transition: "width 0.5s, height 0.2s",
         "&:hover": {
-            backgroundColor: "#75eb95", //"#9561ce",
-            ".listText": { fontSize: "40px" },
+            backgroundColor: "#a0ebb4",
             height: "100px",
             width: "100%",
         },
+    },
+    listItemOnClickClass: {
+        backgroundColor: "#75eb95",
+        border: "0.2px solid rgba(0,0,0,0.3)",
+        height: "100px",
+        width: "100%",
     },
     list: {
         marginTop: "50%",
@@ -114,6 +122,14 @@ const useStyles = makeStyles((theme) => ({
         width: "50px",
         marginRight: "7%",
     },
+    headerText: {
+        fontSize: "50px",
+        fontWeight: 1000,
+        color: "rgba(0, 0, 0,0.5)",
+        [theme.breakpoints.down("md")]: {
+            fontSize: "30px",
+        },
+    },
 }));
 
 const navItems = [
@@ -130,7 +146,7 @@ const navItems = [
     },
     {
         name: "Positions",
-        path: "/user/positions",
+        path: "/user/questrade/positions",
         icon: (iconProps) => (
             <ListItemIcon>
                 <BusinessCenterIcon style={{ color: iconProps.color }} />
@@ -141,7 +157,7 @@ const navItems = [
     },
     {
         name: "Executions",
-        path: "/user/executions",
+        path: "/user/questrade/executions",
         icon: (iconProps) => (
             <ListItemIcon>
                 <DynamicFeedIcon style={{ color: iconProps.color }} />
@@ -152,10 +168,21 @@ const navItems = [
     },
     {
         name: "Orders",
-        path: "/user/orders",
+        path: "/user/questrade/orders",
         icon: (iconProps) => (
             <ListItemIcon>
                 <AvTimerIcon style={{ color: iconProps.color }} />
+            </ListItemIcon>
+        ),
+        iconColor: "#7b85e3",
+        color: "black",
+    },
+    {
+        name: "QS Accounts",
+        path: "/user/questrade/accounts",
+        icon: (iconProps) => (
+            <ListItemIcon>
+                <AccountBalanceIcon style={{ color: iconProps.color }} />
             </ListItemIcon>
         ),
         iconColor: "#7b85e3",
@@ -190,6 +217,9 @@ type INavProps = AbstractProps & {
 const drawerWidth = 280;
 
 const Nav: React.FC<INavProps> = (props: INavProps) => {
+    const audio = new Audio(soundClip);
+    audio.volume = 0.1;
+    const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -198,17 +228,12 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
         {
             dashboard: "Dashboard",
             profileSettings: "Settings",
-            positions: "Positions",
-            executions: "Executions",
-            orders: "Orders",
-            "reports/deep": "Reports",
+            "questrade/positions": "Positions",
+            "questrade/executions": "Executions",
+            "questrade/orders": "Orders",
+            "questrade/accounts": "QS Accounts",
         }[props.path || "dashboard"]
     );
-    const logout = () => {
-        //dispatch(userActions._auth());
-        //props.history.push('/login/admin')
-        //store.dispatch(actionCreator.logout("CONSUMER"));
-    };
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
@@ -223,6 +248,9 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         style={{ textDecoration: "none" }}
                         onClick={() => {
                             setCurrentHeading(navItem.name);
+                            dispatch(
+                                actions.setCurrentBrowserPath(navItem.path)
+                            );
                             if (navItem.name === "Logout") {
                                 const path = localStorage.getItem("path");
                                 if (path && path.trim() === "") {
@@ -238,16 +266,23 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         }}
                     >
                         <ListItem
-                            className={classes.listItem}
+                            className={
+                                currentHeading === navItem.name
+                                    ? classes.listItemOnClickClass
+                                    : classes.listItem
+                            }
                             button
                             key={navItem.name}
                             onMouseEnter={() => {
+                                audio.play();
+
                                 const newObj = {};
                                 setNavItemTextColor({
                                     [navItem.name]: "black",
                                 });
                             }}
                             onMouseLeave={() => {
+                                audio.pause();
                                 setNavItemTextColor({
                                     [navItem.name]: "black",
                                 });
@@ -291,7 +326,11 @@ const Nav: React.FC<INavProps> = (props: INavProps) => {
                         <MenuIcon className={classes.menuIcon} />
                     </IconButton>
 
-                    <Typography variant="h1">{currentHeading}</Typography>
+                    <Typography variant="h1">
+                        <span className={classes.headerText}>
+                            {currentHeading}
+                        </span>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">

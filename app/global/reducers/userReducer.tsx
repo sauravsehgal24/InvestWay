@@ -20,6 +20,15 @@ const userReducer = (
         case "AUTH": {
             return payload;
         }
+        case "DEBUGMODE": {
+            return { ...state, debugMode: payload };
+        }
+        case "MODAL": {
+            return { ...state, modalOpen: payload };
+        }
+        case "PATH": {
+            return { ...state, path: payload };
+        }
         case "LOGOUT":
             clearUserTokenFromLS();
             return null;

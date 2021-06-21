@@ -46,7 +46,7 @@ export class QsService {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                throw "ERROR IN TOKEN DEAL";
             });
     };
 
@@ -96,16 +96,30 @@ export class QsService {
         // Dont really require the endTime but just in case if i place order at 8:01 and cron got delayed and ran at 8:02 then their will be duplicate record
         const _endDate =
             currentDate.toISOString().split("T")[0] + "T08:00:00" + offset;
+        // return this.syncBalances(updatedUser)
+        //     .then((user) => {
+        //         return user;
+        //     })
+        //     .catch((err) => {
+        //         throw "ERROR SYNCING BALANCES";
+        //     });
+
         return this.syncPositions(updatedUser)
             .then(async (result) => {
-                return result;
+                return this.syncBalances(result as User)
+                    .then((user) => {
+                        return user;
+                    })
+                    .catch((err) => {
+                        throw "ERROR SYNCING BALANCES";
+                    });
             })
             .catch((err) => {
                 throw "ERROR SYNCING ACCOUNTS";
             });
     };
 
-    private syncBalancess = (userInfo: User): Promise<User | void> => {
+    private syncBalances = (userInfo: User): Promise<User | void> => {
         const accountId = userInfo.qsProfileData.accounts[0].number;
         const ep =
             userInfo.tokenData.api_server +
@@ -119,33 +133,72 @@ export class QsService {
         })
             .then(async (res) => {
                 if (
-                    !res.data ||
-                    !res.data[0].perCurrencyBalances ||
-                    res.data[0].perCurrencyBalances.length === 0
+                    !res.data.perCurrencyBalances ||
+                    !res.data.perCurrencyBalances[0] ||
+                    res.data.perCurrencyBalances[0].length === 0
                 ) {
                     throw "ERROR FETCHING BALANCE INFO";
                 }
-                const { perCurrencyBalances } = res.data as BalanceDetail;
+                const perCurrencyBalances: Array<IndvBalanceDetail> = res.data
+                    .perCurrencyBalances as Array<IndvBalanceDetail>;
                 let balance: Balance;
 
-                const latestCadBalance: Array<IndvBalanceDetail> = perCurrencyBalances.filter(
+                const latestCadBalance: IndvBalanceDetail = perCurrencyBalances.filter(
                     (balanceDetail) => {
                         return balanceDetail.currency === "CAD";
                     }
-                );
+                )[0];
                 let payload = {};
+                let prepBalanceDataToAppend: Partial<Balance> = {};
+                prepBalanceDataToAppend.updatedDate = new Date();
+                prepBalanceDataToAppend.createdDate = new Date();
+                prepBalanceDataToAppend.openPAndL = QsService.openPandL;
+                prepBalanceDataToAppend.recordHistory = [new Date()];
+                prepBalanceDataToAppend.detail = res.data;
                 if (
                     !qsBalanceData ||
-                    qsBalanceData.marketValue !==
-                        latestCadBalance[0].marketValue
+                    qsBalanceData.marketValue !== latestCadBalance.marketValue
                 ) {
+                    const isBalanceArrayExist =
+                        userInfo.qsProfileData.balances &&
+                        userInfo.qsProfileData.balances.length !== 0
+                            ? userInfo.qsProfileData.balances
+                            : [];
                     payload = {
                         "qsProfileData.latestBalance": {
-                            ...latestCadBalance[0],
+                            ...latestCadBalance,
                             openPAndL: QsService.openPandL,
+                            updateDate: new Date(),
+                            createdDate:
+                                !qsBalanceData || !qsBalanceData.createdDate
+                                    ? new Date()
+                                    : qsBalanceData.createdDate,
                         },
+                        "qsProfileData.balances": [
+                            ...isBalanceArrayExist,
+                            prepBalanceDataToAppend,
+                        ],
                     };
                 } else {
+                    const lastBalanceFromQsData: Balance =
+                        userInfo.qsProfileData.balances[
+                            userInfo.qsProfileData.balances.length - 1
+                        ];
+                    lastBalanceFromQsData.updatedDate = new Date();
+                    lastBalanceFromQsData.recordHistory = [
+                        ...lastBalanceFromQsData.recordHistory,
+                        new Date(),
+                    ];
+                    const oldBalances = userInfo.qsProfileData.balances.slice(
+                        0,
+                        -1
+                    );
+                    payload = {
+                        "qsProfileData.balances": [
+                            ...oldBalances,
+                            lastBalanceFromQsData,
+                        ],
+                    };
                 }
                 const updatedUser: User = (await this.userService.updateUser(
                     "sauravsehgal44@gmail.com",
@@ -155,7 +208,7 @@ export class QsService {
                 return updatedUser as User;
             })
             .catch((err) => {
-                console.log(err);
+                throw "ERROR IN SYNC BALANCES CONTEXT";
             });
     };
 
@@ -187,7 +240,7 @@ export class QsService {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                throw "ERROR IN SYNC POSITIONS CONTEXT";
             });
     };
 
@@ -229,7 +282,7 @@ export class QsService {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                throw "ERROR IN SYNC EXECUTIONS CONTEXT";
             });
     };
 
@@ -267,7 +320,7 @@ export class QsService {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                throw "ERROR IN SYNC ORDERS CONTEXT";
             });
     };
 
@@ -281,8 +334,6 @@ export class QsService {
             Authorization: `Bearer ${tokenData.access_token}`,
         })
             .then(async (res: any) => {
-                console.log(`\nACCOUNTS DATA\n`);
-                console.log(res.data);
                 const payload = {
                     "qsProfileData.accounts": [...res.data.accounts],
                     tokenData: { ...tokenData },

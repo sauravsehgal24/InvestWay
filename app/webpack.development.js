@@ -29,14 +29,24 @@ module.exports = {
                 test: /\.(png|svg|jpg|jpeg|gif)$/,
                 use: ["url-loader"],
             },
+            {
+                include: [`${path.resolve(__dirname, "./assets/audio")}`],
+                test: /\.(mp3|wav)$/,
+                use: ["file-loader"],
+            },
         ],
     },
     devServer: {
+        watchOptions: {
+            ignored: /node_modules/,
+        },
         historyApiFallback: true,
+        inline: true,
         compress: true,
         watchContentBase: true,
         liveReload: true,
         port: 3001,
+        hot: true,
     },
     plugins: [
         new HtmlWebpackPlugin({

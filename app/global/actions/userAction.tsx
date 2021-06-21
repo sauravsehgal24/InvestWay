@@ -63,6 +63,10 @@ const loadUserInfo = ({ token, newAthTkn }, dispatch) => {
                 throw "Please activate your account first";
             }
             dispatch(_saveUserToState(user));
+            console.log(user)
+            if(user.isDummy){
+                dispatch(toggleModal(true,"dummyUserModal"))
+            }
             const role = user.role;
             saveUserTokenToLS({ token, exp, role });
         })
@@ -76,6 +80,10 @@ const saveUserTokenToLS = (payload) => {
     const { token, exp, role } = payload;
     localStorage.setItem(`investway_token`, token);
     localStorage.setItem(`investway_exp`, exp);
+    if(localStorage.getItem("_email") && localStorage.getItem("_password")){
+        localStorage.removeItem("_email")
+        localStorage.removeItem("_password")
+    }
 };
 
 export const tryAutoAuthentication = (role) => {
@@ -103,11 +111,31 @@ export const _logout = () => {
         payload: {},
     };
 };
+export const toggleDebugMode = (debugMode) => {
+    return {
+        type: "DEBUGMODE",
+        payload: debugMode,
+    };
+};
+
+export const toggleModal = (modalOpen, modalType?) => {
+    return {
+        type: "MODAL",
+        payload: { val: modalOpen, type: modalType },
+    };
+};
+
+export const setCurrentBrowserPath = (pathString) => {
+    return {
+        type: "PATH",
+        payload: pathString,
+    };
+};
 
 const _saveUserToState = (payload) => {
     return {
         type: "AUTH",
-        payload: payload,
+        payload: { ...payload, debugMode: false },
     };
 };
 

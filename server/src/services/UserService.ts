@@ -21,7 +21,7 @@ export class UserService {
     public findUserById = async (req) => {
         let user;
         const { userId, athTkn } = req.query;
-        if (athTkn.trim() !== "") {
+        if (athTkn && athTkn.trim() !== "") {
             user = (
                 await this._userRepo.findOneAndUpdate(
                     {
@@ -36,8 +36,11 @@ export class UserService {
                     }
                 )
             ).value;
+            console.log(user)
         } else {
             user = await this._userRepo.findOne({ userId: userId });
+            console.log(userId)
+            console.log(user)
         }
         return user;
     };

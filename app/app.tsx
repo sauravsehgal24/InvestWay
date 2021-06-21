@@ -15,7 +15,12 @@ import Nav from "./src/components/sharedComponents/Nav";
 import { AbstractProps } from "..";
 import { useSelector } from "react-redux";
 import store from "./global/store/store";
-import { tryAutoAuthentication } from "./global/actions/userAction";
+import {
+    tryAutoAuthentication,
+    setCurrentBrowserPath,
+    toggleModal,
+} from "./global/actions/userAction";
+import IWModal from "./src/components/sharedComponents/IWModal";
 
 type IAppProps = AbstractProps & {
     context: string;
@@ -47,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        backgroundColor: "rgba(242, 242, 242,1)",
     },
 }));
 
@@ -56,25 +62,40 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
     }, []);
     const handleSearchPath = () => {
         const path = localStorage.getItem("path");
+        store.dispatch(setCurrentBrowserPath(""));
         if (path && path.trim() !== "") {
             localStorage.removeItem("path");
         }
     };
     const classes = useStyles();
     const user = useSelector<{ userInfo }>((state) => state.userInfo);
+    const handleIWModal = () => {
+        store.dispatch(
+            toggleModal(
+                !(user as any).modalOpen.val,
+                (user as any).modalOpen.type
+            )
+        );
+    };
+
+    const handlePortalRouter = () =>{
+     
+        return (
+            <Redirect
+                to={
+                    localStorage.getItem("path")
+                        ? `/user/${localStorage.getItem("path")}`
+                        : "/user/dashboard"
+                }
+            />
+        )
+    }
+
     return (
         <React.Fragment>
             {!user ? (
                 <Redirect to={`/`} />
-            ) : (
-                <Redirect
-                    to={
-                        localStorage.getItem("path")
-                            ? `/user/${localStorage.getItem("path")}`
-                            : "/user/dashboard"
-                    }
-                />
-            )}
+            ) : handlePortalRouter() }
             <Switch>
                 <Route path="/user" exact={false}>
                     <div className={classes.root}>
@@ -104,6 +125,14 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                                 })}
                             </Switch>
                         </main>
+                        {user && (user as any).modalOpen && (
+                            <IWModal
+                                modalOpen={(user as any).modalOpen.val || false}
+                                handleOnClose={handleIWModal}
+                                modalType={(user as any).modalOpen.type || ""}
+                                user={user}
+                            />
+                        )}
                     </div>
                 </Route>
                 <Route

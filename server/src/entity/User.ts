@@ -97,7 +97,11 @@ export class QsProfileData {
     orders: Array<any>;
 
     @Column({})
-    latestBalance: IndvBalanceDetail & { openPAndL: string };
+    latestBalance: IndvBalanceDetail & {
+        openPAndL: string;
+        createdDate: Date;
+        updatedDate: Date;
+    };
 
     @Column({})
     balances: Array<Balance>;
@@ -153,6 +157,9 @@ class AccountSettings {
     athTkn: string;
 
     @Column({ type: "varchar", length: 150, nullable: true })
+    cronTkn: string;
+
+    @Column({ type: "varchar", length: 150, nullable: true })
     address: string;
 
     @Column({ type: "varchar", length: 150, nullable: true })
@@ -176,6 +183,9 @@ export default class User {
     })
     accountSettings: AccountSettings;
 
+    @Column({ type: "varchar", length: 150, nullable: true })
+    name: string;
+
     @Column({
         nullable: false,
     })
@@ -193,6 +203,12 @@ export default class User {
         unique: false,
     })
     isActivated: boolean;
+
+    @Column({
+        nullable: true,
+        unique: false,
+    })
+    isDummy: boolean;
 
     @Column({
         nullable: true,
