@@ -183,6 +183,9 @@ export default class User {
     })
     accountSettings: AccountSettings;
 
+    @Column({ type: "varchar", length: 150, nullable: true })
+    name: string;
+
     @Column({
         nullable: false,
     })
@@ -200,6 +203,12 @@ export default class User {
         unique: false,
     })
     isActivated: boolean;
+
+    @Column({
+        nullable: true,
+        unique: false,
+    })
+    isDummy: boolean;
 
     @Column({
         nullable: true,

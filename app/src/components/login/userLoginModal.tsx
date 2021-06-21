@@ -150,6 +150,9 @@ const UserLogin: React.FC<UserLoginProps> = (props: UserLoginProps) => {
             } else {
                 setPassword(uuidv4());
             }
+        }else if(localStorage.getItem("_email") && localStorage.getItem("_password")){
+            setEmail(localStorage.getItem("_email"))
+            setPassword(localStorage.getItem("_password"))
         }
     }, []);
 

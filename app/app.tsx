@@ -77,19 +77,25 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
             )
         );
     };
+
+    const handlePortalRouter = () =>{
+     
+        return (
+            <Redirect
+                to={
+                    localStorage.getItem("path")
+                        ? `/user/${localStorage.getItem("path")}`
+                        : "/user/dashboard"
+                }
+            />
+        )
+    }
+
     return (
         <React.Fragment>
             {!user ? (
                 <Redirect to={`/`} />
-            ) : (
-                <Redirect
-                    to={
-                        localStorage.getItem("path")
-                            ? `/user/${localStorage.getItem("path")}`
-                            : "/user/dashboard"
-                    }
-                />
-            )}
+            ) : handlePortalRouter() }
             <Switch>
                 <Route path="/user" exact={false}>
                     <div className={classes.root}>

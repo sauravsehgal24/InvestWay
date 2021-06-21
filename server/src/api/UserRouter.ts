@@ -43,6 +43,7 @@ export class UserRouter extends BaseRouter<IUserService> {
                 isActivated: user.isActivated,
                 accountSettings: acntSettings,
                 qsProfileData: user.qsProfileData,
+                isDummy:user.isDummy
             };
             res.send(userPayload);
         });
