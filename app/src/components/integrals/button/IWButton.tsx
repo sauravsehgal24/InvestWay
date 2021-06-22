@@ -20,6 +20,7 @@ type IWButtonProps = {
     labelType?: "inherit" | Variant;
     icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
     styles?: any;
+    in?:any
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -97,7 +98,7 @@ const UserLoginButton = (props) => {
                 onClick={() => {
                     props.onClickEvent();
                 }}
-                startIcon={<PersonIcon />}
+                startIcon={!props.in?<PersonIcon />:null}
                 style={props.styles ? props.styles : {}}
                 className={props.classes["userLogin"]}
                 variant="contained"
