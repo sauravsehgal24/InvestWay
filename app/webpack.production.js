@@ -41,7 +41,7 @@ module.exports = {
             template: "./public/index.html",
         }),
         new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify("development"),
+            "process.env.NODE_ENV": JSON.stringify("production"),
             "process.env.REACT_APP_API": JSON.stringify("/api"),
             "process.env.REACT_APP_SERVER": JSON.stringify("/"),
             "process.env.REACT_APP_LOOPBACK": JSON.stringify("/"),

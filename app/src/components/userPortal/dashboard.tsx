@@ -34,10 +34,10 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
         <React.Fragment>
             {user && (
                 <Grid container style={{ marginTop: "2%" }}>
-                    <Grid item xs={12} xl={6} lg={6} md={12} sm={12}>
+                    <Grid item xs={12} xl={8} lg={8} md={12} sm={12}>
                         <OpenPnLChart balances={user.qsProfileData.balances} />
                     </Grid>
-                    <Grid item xs={12} xl={6} lg={6} md={12} sm={12}>
+                    <Grid item xs={12} xl={4} lg={4} md={12} sm={12}>
                         <DiversificationChart
                             ratio={user.accountSettings.qsSettings.dVal}
                         />

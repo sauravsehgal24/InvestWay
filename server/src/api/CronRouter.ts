@@ -8,6 +8,7 @@ import { UserService } from "../services/UserService";
 import { EmailService, IEmailService } from "../services/EmailService";
 import * as path from "path";
 import { IEmailData } from "..";
+import CONFIG from "../config/server.config";
 
 export class CronRouter {
     private _context = "CronRouter";
@@ -23,15 +24,16 @@ export class CronRouter {
     public qsSync = async () => {
         this.router.get("/qsSync", async (req, res) => {
             const cronTkn = req.query.cronTkn;
-            if (!cronTkn || cronTkn.toString().trim() === "") {
+            if (!cronTkn || cronTkn.toString().trim() === "" || CONFIG["SERVER_IW_CRON_TKN"] !== cronTkn) {
                 res.status(404);
             }
+            
             const qsService = new QsService(this.connection);
             const userService = new UserService(this.connection);
             const userInfo = await userService.findUserByEmail(
                 "sauravsehgal44@gmail.com"
             );
-            if (!userInfo || userInfo.accountSettings.cronTkn !== cronTkn) {
+            if (!userInfo) {
                 return res
                     .status(HttpResponse.Forbidden.status)
                     .json({ message: HttpResponse.Forbidden.message });

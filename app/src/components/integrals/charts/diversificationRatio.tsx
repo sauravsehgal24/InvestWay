@@ -16,10 +16,11 @@ type IDiversificationProps = AbstractProps & {
 const useStyles = makeStyles((theme) => ({
     card: {
         width: "90%",
-        height: "100%",
+        height: "55%",
         [theme.breakpoints.down("md")]: {
             width: "100%",
             marginTop: "4%",
+            height:"100%"
         },
         boxShadow: "21px 19px 0px -5px rgba(80,83,84,0.92)",
     },
@@ -43,8 +44,11 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 1000,
         [theme.breakpoints.down("md")]: {
             fontSize: "30px",
-        },
-    },
+        }
+    },heading:{
+      width:"100%",
+      margin:"3%"      
+    }
 }));
 
 const DiversificationChart: React.FC<IDiversificationProps> = (props) => {
@@ -159,6 +163,11 @@ const DiversificationChart: React.FC<IDiversificationProps> = (props) => {
     return (
         <React.Fragment>
             <Card className={classes.card}>
+            <div className={classes.heading}>
+                <Typography variant="h3">
+                    Diverfication Standing
+                </Typography>
+            </div>
                 <CardContent className={classes.cardBody}>
                     <div
                         style={{
