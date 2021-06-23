@@ -165,7 +165,7 @@ const DiversificationChart: React.FC<IDiversificationProps> = (props) => {
             <Card className={classes.card}>
             <div className={classes.heading}>
                 <Typography variant="h3">
-                    Diversification Standing
+                    Portfolio Diversification Score
                 </Typography>
             </div>
                 <CardContent className={classes.cardBody}>
