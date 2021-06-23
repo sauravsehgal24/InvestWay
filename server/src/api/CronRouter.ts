@@ -25,7 +25,7 @@ export class CronRouter {
         this.router.get("/qsSync", async (req, res) => {
             const cronTkn = req.query.cronTkn;
             if (!cronTkn || cronTkn.toString().trim() === "" || CONFIG["SERVER_IW_CRON_TKN"] !== cronTkn) {
-                res.status(404);
+                return res.status(404);
             }
             
             const qsService = new QsService(this.connection);
