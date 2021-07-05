@@ -36,16 +36,20 @@ export class UserService {
                     }
                 )
             ).value;
-            console.log(user)
+            console.log(user);
         } else {
             user = await this._userRepo.findOne({ userId: userId });
-            console.log(userId)
-            console.log(user)
+            console.log(userId);
+            console.log(user);
         }
         return user;
     };
 
-    public updateUser = async (email, payload, upsert?):Promise<User |void> => {
+    public updateUser = async (
+        email,
+        payload,
+        upsert?
+    ): Promise<User | void> => {
         const updateDoc = {
             $set: { ...payload },
         };
@@ -86,7 +90,8 @@ export class UserService {
     };
 
     public testUserService = async () => {
-        const user = await this._userRepo.find();
+        const user = await this._userRepo.findOne();
+        console.log(user);
         return user;
     };
 }

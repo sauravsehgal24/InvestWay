@@ -24,14 +24,20 @@ export class CronRouter {
     public qsSync = async () => {
         this.router.get("/qsSync", async (req, res) => {
             const cronTkn = req.query.cronTkn;
-            if (!cronTkn || cronTkn.toString().trim() === "" || CONFIG["SERVER_IW_CRON_TKN"] !== cronTkn) {
-                return res.status(404);
+            if (
+                !cronTkn ||
+                cronTkn.toString().trim() === "" ||
+                CONFIG["SERVER_IW_CRON_TKN"] !== cronTkn
+            ) {
+                return res.status(HttpResponse.Forbidden.status).json({
+                    message: HttpResponse.Forbidden.message,
+                });
             }
-            
+
             const qsService = new QsService(this.connection);
             const userService = new UserService(this.connection);
             const userInfo = await userService.findUserByEmail(
-                "sauravsehgal44@gmail.com"
+                "saurav@gmail.com"
             );
             if (!userInfo) {
                 return res
