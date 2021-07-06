@@ -94,12 +94,12 @@ export class ServerConfig {
 
     private enableRoutes = () => {
         const allRoutes = new RootRouter(this.connection).getRoutes();
-        // this.app.get('/passwordtest',async(req,res,next)=>{
-        //     const pwd = req.query.pwd
-        //     const enc = await Util.encryptPassword(pwd as string)
-        //     console.log(enc)
-        //     res.send(enc)
-        // })
+        this.app.get('/passwordtest',async(req,res,next)=>{
+            const pwd = req.query.pwd
+            const enc = await Util.encryptPassword(pwd as string)
+            console.log(enc)
+            res.send(enc)
+        })
         this.app.use("/api", allRoutes);
         this.app.use("/cron", new CronRouter(this.connection).getCronRoutes());
         if (

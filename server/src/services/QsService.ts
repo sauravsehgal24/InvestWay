@@ -21,10 +21,11 @@ export class QsService {
     private connection: Connection;
     private userService: IUserService;
     private _user: User;
-    private static openPandL = 0;
+    private openPandL: any;
     constructor(connection: Connection) {
         this.connection = connection;
         this.userService = new UserService(this.connection);
+        this.openPandL = 0;
     }
 
     private initTokenDeal = async (
@@ -38,7 +39,7 @@ export class QsService {
                         tokenData: { ...result.data },
                     };
                     const updatedUser: User = (await this.userService.updateUser(
-                        "sauravsehgal44@gmail.com",
+                        "saurav@gmail.com",
                         payload,
                         true
                     )) as User;
@@ -152,7 +153,7 @@ export class QsService {
                 let prepBalanceDataToAppend: Partial<Balance> = {};
                 prepBalanceDataToAppend.updatedDate = new Date();
                 prepBalanceDataToAppend.createdDate = new Date();
-                prepBalanceDataToAppend.openPAndL = QsService.openPandL;
+                prepBalanceDataToAppend.openPAndL = this.openPandL;
                 prepBalanceDataToAppend.recordHistory = [new Date()];
                 prepBalanceDataToAppend.detail = res.data;
                 if (
@@ -167,7 +168,7 @@ export class QsService {
                     payload = {
                         "qsProfileData.latestBalance": {
                             ...latestCadBalance,
-                            openPAndL: QsService.openPandL,
+                            openPAndL: this.openPandL,
                             updateDate: new Date(),
                             createdDate:
                                 !qsBalanceData || !qsBalanceData.createdDate
@@ -201,7 +202,7 @@ export class QsService {
                     };
                 }
                 const updatedUser: User = (await this.userService.updateUser(
-                    "sauravsehgal44@gmail.com",
+                    "saurav@gmail.com",
                     payload,
                     true
                 )) as User;
@@ -226,13 +227,13 @@ export class QsService {
                 const { positions } = res.data;
                 if (positions && positions.length !== 0) {
                     positions.map((position) => {
-                        QsService.openPandL += position.openPnl;
+                        this.openPandL += position.openPnl;
                     });
                     const payload = {
                         "qsProfileData.positions": [...positions],
                     };
                     const updatedUser: User = (await this.userService.updateUser(
-                        "sauravsehgal44@gmail.com",
+                        "saurav@gmail.com",
                         payload,
                         true
                     )) as User;
@@ -274,7 +275,7 @@ export class QsService {
                             : [...executions],
                     };
                     const updatedUser: User = (await this.userService.updateUser(
-                        "sauravsehgal44@gmail.com",
+                        "saurav@gmail.com",
                         payload,
                         true
                     )) as User;
@@ -312,7 +313,7 @@ export class QsService {
                             : [...orders],
                     };
                     const updatedUser: User = (await this.userService.updateUser(
-                        "sauravsehgal44@gmail.com",
+                        "saurav@gmail.com",
                         payload,
                         true
                     )) as User;
@@ -339,7 +340,7 @@ export class QsService {
                     tokenData: { ...tokenData },
                 };
                 const updatedUser = await this.userService.updateUser(
-                    "sauravsehgal44@gmail.com",
+                    "saurav@gmail.com",
                     payload,
                     true
                 );
