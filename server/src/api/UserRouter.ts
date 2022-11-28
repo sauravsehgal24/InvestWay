@@ -28,6 +28,11 @@ export class UserRouter extends BaseRouter<IUserService> {
     private getUserById = () => {
         this.router.get("/", async (req, res) => {
             const user = await this.userService.findUserById(req);
+            if (!user) {
+                return res
+                    .status(HttpResponse.Forbidden.status)
+                    .json({ message: HttpResponse.Forbidden.message });
+            }
             let acntSettings = {};
             Object.keys(user.accountSettings).map((key) => {
                 if (key !== "password" && key !== "athTkn") {

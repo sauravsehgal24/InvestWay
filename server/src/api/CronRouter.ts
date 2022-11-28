@@ -37,7 +37,7 @@ export class CronRouter {
             const qsService = new QsService(this.connection);
             const userService = new UserService(this.connection);
             const userInfo = await userService.findUserByEmail(
-                "saurav@gmail.com"
+                "sauravsehgal44@gmail.com"
             );
             if (!userInfo) {
                 return res
@@ -54,15 +54,16 @@ export class CronRouter {
                 .then((updatedUser) => {
                     res.status(HttpResponse.OK.status).json({ updatedUser });
                     replacements.status = "CRON COMPLETED";
-                    this.emailService.sendCronMail(replacements);
+                   // this.emailService.sendCronMail(replacements);
                 })
                 .catch((err) => {
                     replacements.status = "CRON FAILED WITH ERR";
                     replacements.error = err.toString();
+                    console.log(err);
                     res.status(HttpResponse.ServerError.status).json({
                         message: "SYNC FUCKED",
                     });
-                    this.emailService.sendCronMail(replacements);
+                    //this.emailService.sendCronMail(replacements);
                 });
         });
     };

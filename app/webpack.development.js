@@ -55,10 +55,10 @@ module.exports = {
         new webpack.DefinePlugin({
             "process.env.NODE_ENV": JSON.stringify("development"),
             "process.env.REACT_APP_API": JSON.stringify(
-                "http://localhost:3000/api"
+                "http://localhost:3005/api"
             ),
             "process.env.REACT_APP_SERVER": JSON.stringify(
-                "http://localhost:3000"
+                "http://localhost:3005"
             ),
             "process.env.REACT_APP_LOOPBACK": JSON.stringify(
                 "http://localhost:3001"

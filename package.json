@@ -94,6 +94,7 @@
         "uuid": "^8.3.2"
     },
     "devDependencies": {
+        "@types/compression": "^1.7.2",
         "@types/node": "^15.0.1",
         "@types/react": "^17.0.4",
         "@types/react-dom": "^17.0.3",

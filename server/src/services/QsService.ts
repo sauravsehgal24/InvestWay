@@ -32,6 +32,7 @@ export class QsService {
         refreshToken: string
     ): Promise<User | void> => {
         const url = SERVER_CONFIG["SERVER_IW_QS_API_DEAL"] + refreshToken;
+        console.log(url)
         return _apiCall<QsTokenDealResponse>("POST", url)
             .then(async (result) => {
                 if (result.data && result.data.access_token) {
@@ -39,7 +40,7 @@ export class QsService {
                         tokenData: { ...result.data },
                     };
                     const updatedUser: User = (await this.userService.updateUser(
-                        "saurav@gmail.com",
+                        "sauravsehgal44@gmail.com",
                         payload,
                         true
                     )) as User;
@@ -104,9 +105,9 @@ export class QsService {
         //     .catch((err) => {
         //         throw "ERROR SYNCING BALANCES";
         //     });
-
         return this.syncPositions(updatedUser)
             .then(async (result) => {
+                    console.log(result)
                 return this.syncBalances(result as User)
                     .then((user) => {
                         return user;
@@ -116,6 +117,7 @@ export class QsService {
                     });
             })
             .catch((err) => {
+                console.log(err)
                 throw "ERROR SYNCING ACCOUNTS";
             });
     };
@@ -202,7 +204,7 @@ export class QsService {
                     };
                 }
                 const updatedUser: User = (await this.userService.updateUser(
-                    "saurav@gmail.com",
+                    "sauravsehgal44@gmail.com",
                     payload,
                     true
                 )) as User;
@@ -233,7 +235,7 @@ export class QsService {
                         "qsProfileData.positions": [...positions],
                     };
                     const updatedUser: User = (await this.userService.updateUser(
-                        "saurav@gmail.com",
+                        "sauravsehgal44@gmail.com",
                         payload,
                         true
                     )) as User;

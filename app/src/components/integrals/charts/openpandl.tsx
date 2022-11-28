@@ -36,10 +36,10 @@ const OpenPnLChart: React.FC<OpenPnLChartProps> = (props) => {
     const classes = useStyles();
     const buildBalancesChart = () => {
         const balances = props.balances;
-        let labels = [];
-        let openpnl = [];
-        let cash = [];
-        let mktVal = [];
+        let labels:any = [];
+        let openpnl:any = [];
+        let cash:any = [];
+        let mktVal:any = [];
         balances.map((balance) => {
             balance.recordHistory.map((history) => {
                 labels = [...labels, history];

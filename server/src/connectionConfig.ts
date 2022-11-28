@@ -1,7 +1,7 @@
 import { ConnectionOptions } from "typeorm";
 import * as path from "path";
 import SERVER_CONFIG from "./config/server.config";
-const _url = `mongodb://${SERVER_CONFIG["SERVER_IW_DB_USERNAME"]}:${SERVER_CONFIG["SERVER_IW_DB_PASSWORD"]}@${SERVER_CONFIG["SERVER_IW_DB_HOST"]}:27017`;
+const _url = `mongodb://${SERVER_CONFIG["SERVER_IW_DB_USERNAME"]}:${SERVER_CONFIG["SERVER_IW_DB_PASSWORD"]}@${SERVER_CONFIG["SERVER_IW_DB_HOST"]}:${SERVER_CONFIG["SERVER_IW_DB_PORT"]}`;
 const config: ConnectionOptions = {
     type: "mongodb",
     url: `${_url}, {useNewUrlParser: true}`,
